@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Елизавета Арцер](https://up.htmlacademy.ru/javascript/17/user/585223).
-* Наставник: [Владимир Кашапов](https://htmlacademy.ru/profile/ksneo).
+* Наставник: [Магомед Кандаев](https://htmlacademy.ru/profile/magomedkandaev).
 
 ---
 
