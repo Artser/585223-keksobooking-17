@@ -14,7 +14,12 @@ var showMap = function () {
   var map = document.querySelector('.map');
   map.classList.remove('map--faded');
 };
-
+var showForm = function () {
+  var form = document.querySelector('.ad-form');
+  document.querySelector('.map__filters').disabled = true;
+  form.classList.remove('ad-form--disabled');
+  form.querySelector('input, select').disabled = true;
+};
 // Создадим функцию генерации меток
 var generateLabels = function (quantity) {
   var adverts = [];
@@ -59,5 +64,17 @@ var drawPins = function (data) {
 };
 
 var ads = generateLabels(8);
-drawPins(ads);
-showMap();
+
+var formEnable = function () {
+  drawPins(ads);
+  showMap();
+  showForm();
+};
+var pushAdress = function (event) {
+  var x = event.clientX;
+  var y = event.clientY;
+  document.getElementById('address').value = x + ',' + y;
+};
+document.querySelector('.map__pin--main').onclick = formEnable;
+document.querySelector('.map__pin').onmouseup = pushAdress;
+
