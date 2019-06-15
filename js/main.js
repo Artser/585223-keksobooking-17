@@ -21,7 +21,7 @@ var generateLabels = function (quantity) {
   for (var i = 1; i <= quantity; i++) {
     // заполняем массив объектами
     adverts.push({
-      autor: {
+      author: {
         avatar: 'img/avatars/user0' + i + '.png'
       },
       offer: {
