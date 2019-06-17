@@ -30,8 +30,8 @@ var showMap = function () {
         var dy = evt.clientY - downY;
         downX = evt.clientX;
         downY = evt.clientY;
-        var newX = parseFloat(pin.style.left) + dx;
-        var newY = parseFloat(pin.style.top) + dy;
+        var newX = parseFloat(mainPin.style.left) + dx;
+        var newY = parseFloat(mainPin.style.top) + dy;
         if (
           newY > MAP_MAX_HEIGHT ||
           newY < 130 ||
@@ -41,8 +41,8 @@ var showMap = function () {
           isDown = false;
           return;
         } else {
-          pin.style.left = newX + 'px';
-          pin.style.top = newY + 'px';
+          mainPin.style.left = newX + 'px';
+          mainPin.style.top = newY + 'px';
           updatePinCoordField();
         }
       }
@@ -105,7 +105,7 @@ var drawPin = function (dataobj) {
 var disabledForm = function () {
   document
     .querySelectorAll(
-        'form.ad-form input[type=text], form.ad-form select, form.ad-form textarea'
+        'form.ad-form input, form.ad-form select, form.ad-form textarea, form.ad-form button, form.ad-form features'
     )
     .forEach(function (evt) {
       evt.disabled = 'disabled';
@@ -126,27 +126,78 @@ var ads = generateLabels(8);
 var isDown = false;
 var downX;
 var downY;
-var pin;
+var mainPin;
 var mapPins;
 
 var updatePinCoordField = function () {
-  var px = parseInt(pin.style.left, 10) + Math.floor(PIN_WIDTH / 2);
-  var py = parseInt(pin.style.top, 10) + PIN_HEIGHT;
+  var px = parseInt(mainPin.style.left, 10) + Math.floor(PIN_WIDTH / 2);
+  var py = parseInt(mainPin.style.top, 10) + PIN_HEIGHT;
   document.querySelector('#address').value = px + ',' + py;
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-  pin = document.querySelector('.map__pin--main');
+  mainPin = document.querySelector('.map__pin--main');
   mapPins = document.querySelector('.map__pins');
 
   disabledForm();
   updatePinCoordField();
 
-  document
-    .querySelector('.map__pin--main')
-    .addEventListener('click', function () {
-      drawPins(ads);
-      showMap();
-      showForm();
-    });
+  mainPin.addEventListener('click', function () {
+    drawPins(ads);
+    showMap();
+    showForm();
+  });
 });
+
+// var form = document.querySelector('.ad-form.ad-form--disabled');
+
+// form.onsubmit = function validate(e) {
+//   if ('title.value == '') {
+//     e.preventDefault();
+//   }
+
+//   if (title.value.length <= 2 || title.value.length >= 10) {
+//     console.log(
+//         'title.value.length: ' +
+//         title.value.length +
+//         ' значение не попадает в диапазон'
+//     );
+
+//     e.preventDefault();
+//   }
+
+//   if (typeof title.value !== 'string') {
+
+//     e.preventDefault();
+//   }
+// };
+
+// type.onchange = function () {
+//   if (type.value == 'bungalo') {
+//     price.setAttribute('placeholder', '0');
+//   }
+//   if (type.value == 'flat') {
+//     price.setAttribute('placeholder', '1000');
+//   }
+//   if (type.value == 'house') {
+//     price.setAttribute('placeholder', '5000');
+//   }
+//   if (type.value == 'palace') {
+//     price.setAttribute('placeholder', '10000');
+//   }
+// };
+
+// timein.onchange = function () {
+//   if (timein.value == 'bungalo') {
+//     price.setAttribute('placeholder', '0');
+//   }
+//   if (timein.value == '12:00') {
+//     price.setAttribute('placeholder', '1000');
+//   }
+//   if (timein.value == '13:00') {
+//     price.setAttribute('placeholder', '5000');
+//   }
+//   if (timein.value == '14:00') {
+//     price.setAttribute('placeholder', '10000');
+//   }
+// };
