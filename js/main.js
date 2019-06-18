@@ -22,33 +22,30 @@ var showMap = function () {
       downY = evt.clientY;
     });
 
-  document
-    .querySelector('.map__pin')
-    .addEventListener('mousemove', function (evt) {
-      if (isDown) {
-        var dx = evt.clientX - downX;
-        var dy = evt.clientY - downY;
-        downX = evt.clientX;
-        downY = evt.clientY;
-        var newX = parseFloat(mainPin.style.left) + dx;
-        var newY = parseFloat(mainPin.style.top) + dy;
-        if (
-          newY > MAP_MAX_HEIGHT ||
-          newY < 130 ||
-          newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-          newX < -PIN_WIDTH / 2
-        ) {
-          isDown = false;
-          return;
-        } else {
-          mainPin.style.left = newX + 'px';
-          mainPin.style.top = newY + 'px';
-          updatePinCoordField();
-        }
+  document.addEventListener('mousemove', function (evt) {
+    if (isDown) {
+      var dx = evt.clientX - downX;
+      var dy = evt.clientY - downY;
+      downX = evt.clientX;
+      downY = evt.clientY;
+      var newX = parseFloat(mainPin.style.left) + dx;
+      var newY = parseFloat(mainPin.style.top) + dy;
+      if (
+        newY > MAP_MAX_HEIGHT ||
+        newY < 130 ||
+        newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
+        newX < -PIN_WIDTH / 2
+      ) {
+        return;
+      } else {
+        mainPin.style.left = newX + 'px';
+        mainPin.style.top = newY + 'px';
+        updatePinCoordField();
       }
-    });
+    }
+  });
 
-  document.querySelector('.map__pin').addEventListener('mouseup', function () {
+  document.addEventListener('mouseup', function () {
     isDown = false;
   });
   // /
@@ -58,13 +55,9 @@ var showForm = function () {
   document.querySelector('.map__filters').disabled = true;
   form.classList.remove('ad-form--disabled');
   // form.querySelector('input, select').disabled = true;
-  document
-    .querySelectorAll(
-        'form.ad-form input[type=text], form.ad-form select, form.ad-form textarea'
-    )
-    .forEach(function (evt) {
-      evt.disabled = '';
-    });
+  document.querySelectorAll('form.ad-form fieldset').forEach(function (element) {
+    element.removeAttribute('disabled');
+  });
 };
 // Создадим функцию генерации меток
 var generateLabels = function (quantity) {
@@ -103,13 +96,9 @@ var drawPin = function (dataobj) {
 };
 
 var disabledForm = function () {
-  document
-    .querySelectorAll(
-        'form.ad-form input, form.ad-form select, form.ad-form textarea, form.ad-form button, form.ad-form features'
-    )
-    .forEach(function (evt) {
-      evt.disabled = 'disabled';
-    });
+  document.querySelectorAll('form.ad-form fieldset').forEach(function (evt) {
+    evt.setAttribute('disabled', 'disabled');
+  });
 };
 
 var drawPins = function (data) {
@@ -121,7 +110,7 @@ var drawPins = function (data) {
   mapPinsElement.appendChild(pinsFragment);
 };
 
-var ads = generateLabels(8);
+var Labels = generateLabels(8);
 // //////////////
 var isDown = false;
 var downX;
@@ -143,61 +132,48 @@ document.addEventListener('DOMContentLoaded', function () {
   updatePinCoordField();
 
   mainPin.addEventListener('click', function () {
-    drawPins(ads);
+    drawPins(Labels);
     showMap();
     showForm();
   });
 });
 
-// var form = document.querySelector('.ad-form.ad-form--disabled');
+var form = document.querySelector('.ad-form.ad-form--disabled');
+// валидация полей формы
+var priceOfNight = form.querySelector('#type');
+priceOfNight.addEventListener('change', function (evt) {
+  var value = evt.target.value;
+  var price = form.querySelector('#price');
+  if (value === 'bungalo') {
+    price.setAttribute('min', 0);
+  } else if (value === 'flat') {
+    price.setAttribute('min', 1000);
+  } else if (value === 'house') {
+    price.setAttribute('min', 5000);
+  } else if (value === 'palace') {
+    price.setAttribute('min', 10000);
+  }
+});
 
-// form.onsubmit = function validate(e) {
-//   if ('title.value == '') {
-//     e.preventDefault();
-//   }
-
-//   if (title.value.length <= 2 || title.value.length >= 10) {
-//     console.log(
-//         'title.value.length: ' +
-//         title.value.length +
-//         ' значение не попадает в диапазон'
-//     );
-
-//     e.preventDefault();
-//   }
-
-//   if (typeof title.value !== 'string') {
-
-//     e.preventDefault();
-//   }
-// };
-
-// type.onchange = function () {
-//   if (type.value == 'bungalo') {
-//     price.setAttribute('placeholder', '0');
-//   }
-//   if (type.value == 'flat') {
-//     price.setAttribute('placeholder', '1000');
-//   }
-//   if (type.value == 'house') {
-//     price.setAttribute('placeholder', '5000');
-//   }
-//   if (type.value == 'palace') {
-//     price.setAttribute('placeholder', '10000');
-//   }
-// };
-
-// timein.onchange = function () {
-//   if (timein.value == 'bungalo') {
-//     price.setAttribute('placeholder', '0');
-//   }
-//   if (timein.value == '12:00') {
-//     price.setAttribute('placeholder', '1000');
-//   }
-//   if (timein.value == '13:00') {
-//     price.setAttribute('placeholder', '5000');
-//   }
-//   if (timein.value == '14:00') {
-//     price.setAttribute('placeholder', '10000');
-//   }
-// };
+var timeIn = form.querySelector('#timein');
+var timeOut = form.querySelector('#timeout');
+timeIn.addEventListener('change', function (evt) {
+  var value = evt.target.value;
+  if (value === '12:00') {
+    timeOut.value = '12:00';
+  } else if (value === '13:00') {
+    timeOut.value = '13:00';
+  } else if (value === '14:00') {
+    timeOut.value = '14:00';
+  }
+});
+timeOut.addEventListener('change', function (evt) {
+  var value = evt.target.value;
+  if (value === '12:00') {
+    timeIn.value = '12:00';
+  } else if (value === '13:00') {
+    timeIn.value = '13:00';
+  } else if (value === '14:00') {
+    timeIn.value = '14:00';
+  }
+});
