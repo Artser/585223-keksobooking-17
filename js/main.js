@@ -15,7 +15,7 @@ var showMap = function () {
   map.classList.remove('map--faded');
   // /
   document
-    .querySelector('.map__pin')
+    .querySelector('.map__pin--main')
     .addEventListener('mousedown', function (evt) {
       isDown = true;
       downX = evt.clientX;
