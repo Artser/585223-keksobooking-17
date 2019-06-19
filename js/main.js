@@ -14,13 +14,12 @@ var showMap = function () {
   var map = document.querySelector('.map');
   map.classList.remove('map--faded');
   // /
-  document
-    .querySelector('.map__pin--main')
-    .addEventListener('mousedown', function (evt) {
-      isDown = true;
-      downX = evt.clientX;
-      downY = evt.clientY;
-    });
+  var startMouse = document.querySelector('.map__pin--main');
+  startMouse.addEventListener('mousedown', function (evt) {
+    isDown = true;
+    downX = evt.clientX;
+    downY = evt.clientY;
+  });
 
   document.addEventListener('mousemove', function (evt) {
     if (isDown) {
@@ -131,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
   disabledForm();
   updatePinCoordField();
 
-  mainPin.addEventListener('click', function () {
+  mainPin.addEventListener('mousedown', function () {
     drawPins(Labels);
     showMap();
     showForm();
