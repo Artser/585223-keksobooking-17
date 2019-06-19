@@ -15,39 +15,73 @@ var showMap = function () {
   map.classList.remove('map--faded');
   // /
   var startMouse = document.querySelector('.map__pin--main');
-  startMouse.addEventListener('mousedown', function (evt) {
-    isDown = true;
-    downX = evt.clientX;
-    downY = evt.clientY;
-  });
 
-  document.addEventListener('mousemove', function (evt) {
-    if (isDown) {
-      var dx = evt.clientX - downX;
-      var dy = evt.clientY - downY;
-      downX = evt.clientX;
-      downY = evt.clientY;
-      var newX = parseFloat(mainPin.style.left) + dx;
-      var newY = parseFloat(mainPin.style.top) + dy;
-      if (
-        newY > MAP_MAX_HEIGHT ||
-        newY < 130 ||
-        newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-        newX < -PIN_WIDTH / 2
-      ) {
-        return;
-      } else {
-        mainPin.style.left = newX + 'px';
-        mainPin.style.top = newY + 'px';
-        updatePinCoordField();
-      }
+  startMouse.onmousedown = function (e) {
+    var coords = getCoords(startMouse);
+    var shiftX = e.pageX - coords.left;
+    var shiftY = e.pageY - coords.top;
+
+    function moveAt(evt) {
+      startMouse.style.left = evt.pageX - shiftX + 'px';
+      startMouse.style.top = evt.pageY - shiftY + 'px';
     }
-  });
 
-  document.addEventListener('mouseup', function () {
-    isDown = false;
-  });
-  // /
+    document.onmousemove = function (evt) {
+      moveAt(evt);
+    };
+
+    startMouse.mouseup = function () {
+      document.onmousemove = null;
+      startMouse.onmouseup = null;
+    };
+  };
+
+  startMouse.ondragstart = function () {
+    return false;
+  };
+
+  function getCoords(elem) {
+    // кроме IE8-
+    var box = elem.getBoundingClientRect();
+    return {
+      top: box.top + pageYOffset,
+      left: box.left + pageXOffset
+    };
+  }
+  // startMouse.addEventListener('mousedown', function (evt) {
+  //   isDown = true;
+  //   downX = evt.clientX;
+  //   downY = evt.clientY;
+  // });
+
+  // document.addEventListener('mousemove', function (evt) {
+  //   if (isDown) {
+  //     var dx = evt.clientX - downX;
+  //     var dy = evt.clientY - downY;
+  //     downX = evt.clientX;
+  //     downY = evt.clientY;
+  //     var newX = parseFloat(mainPin.style.left) + dx;
+  //     var newY = parseFloat(mainPin.style.top) + dy;
+  //     if (
+  //       newY > MAP_MAX_HEIGHT ||
+  //       newY < 130 ||
+  //       newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
+  //       newX < -PIN_WIDTH / 2
+  //     ) {
+  //       return;
+  //     } else {
+  //       mainPin.style.left = newX + 'px';
+  //       mainPin.style.top = newY + 'px';
+  //       updatePinCoordField();
+  //     }
+  //   }
+  // });
+
+  // document.addEventListener('mouseup', function () {
+  //   var isDown = false;
+
+  //   isDown = false;
+  // });
 };
 var showForm = function () {
   var form = document.querySelector('.ad-form');
@@ -81,7 +115,7 @@ var generateLabels = function (quantity) {
 
 var PIN_WIDTH = 62;
 var PIN_HEIGHT = 84;
-var MAP_MAX_HEIGHT = 630;
+// var MAP_MAX_HEIGHT = 630;
 
 var drawPin = function (dataobj) {
   var template = document
@@ -111,11 +145,11 @@ var drawPins = function (data) {
 
 var Labels = generateLabels(8);
 // //////////////
-var isDown = false;
-var downX;
-var downY;
+// var isDown = false;
+// var downX;
+// var downY;
 var mainPin;
-var mapPins;
+// var mapPins;
 
 var updatePinCoordField = function () {
   var px = parseInt(mainPin.style.left, 10) + Math.floor(PIN_WIDTH / 2);
@@ -125,7 +159,7 @@ var updatePinCoordField = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   mainPin = document.querySelector('.map__pin--main');
-  mapPins = document.querySelector('.map__pins');
+  // var mapPins = document.querySelector('.map__pins');
 
   disabledForm();
   updatePinCoordField();
