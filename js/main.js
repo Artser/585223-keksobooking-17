@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
   });
 });
-
+// form
 var form = document.querySelector('.ad-form.ad-form--disabled');
 // валидация полей формы
 var priceOfNight = form.querySelector('#type');
