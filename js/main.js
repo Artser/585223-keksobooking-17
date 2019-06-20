@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // mapPins = document.querySelector('.map__pins');
 
   disabledForm();
-  updatePinCoordField();
+  // updatePinCoordField();
   // отключаем Drag браузера по умолчанию
   mainPin.ondragstart = function () {
     return false;
@@ -121,10 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (
           newY > MAP_MAX_HEIGHT ||
           newY < 130 ||
-          newX > 1150 ||
-          // newX < 0
+          newX > 1140 ||
+          newX < 0
           // newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-          newX < PIN_WIDTH / 2
+          // newX < PIN_WIDTH / 2
         ) {
           return;
         } else {
