@@ -122,9 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
           newY > MAP_MAX_HEIGHT ||
           newY < 130 ||
           newX > 1150 ||
-          newX < 0
+          // newX < 0
           // newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-          // newX < -PIN_WIDTH / 2
+          newX < PIN_WIDTH / 2
         ) {
           return;
         } else {
@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.onmouseup = function () {
       document.onmousemove = null;
       document.onmouseup = null;
+      updatePinCoordField();
     };
   });
 });
