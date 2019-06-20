@@ -13,48 +13,12 @@ var getNumberOfRange = function (minValue, maxValue) {
 var showMap = function () {
   var map = document.querySelector('.map');
   map.classList.remove('map--faded');
-  // /
-  document
-    .querySelector('.map__pin')
-    .addEventListener('mousedown', function (evt) {
-      isDown = true;
-      downX = evt.clientX;
-      downY = evt.clientY;
-    });
-
-  document.addEventListener('mousemove', function (evt) {
-    if (isDown) {
-      var dx = evt.clientX - downX;
-      var dy = evt.clientY - downY;
-      downX = evt.clientX;
-      downY = evt.clientY;
-      var newX = parseFloat(mainPin.style.left) + dx;
-      var newY = parseFloat(mainPin.style.top) + dy;
-      if (
-        newY > MAP_MAX_HEIGHT ||
-        newY < 130 ||
-        newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-        newX < -PIN_WIDTH / 2
-      ) {
-        return;
-      } else {
-        mainPin.style.left = newX + 'px';
-        mainPin.style.top = newY + 'px';
-        updatePinCoordField();
-      }
-    }
-  });
-
-  document.addEventListener('mouseup', function () {
-    isDown = false;
-  });
-  // /
 };
 var showForm = function () {
   var form = document.querySelector('.ad-form');
   document.querySelector('.map__filters').disabled = true;
   form.classList.remove('ad-form--disabled');
-  // form.querySelector('input, select').disabled = true;
+
   document.querySelectorAll('form.ad-form fieldset').forEach(function (element) {
     element.removeAttribute('disabled');
   });
@@ -111,12 +75,9 @@ var drawPins = function (data) {
 };
 
 var Labels = generateLabels(8);
-// //////////////
-var isDown = false;
-var downX;
-var downY;
+// var mapPins;
+
 var mainPin;
-var mapPins;
 
 var updatePinCoordField = function () {
   var px = parseInt(mainPin.style.left, 10) + Math.floor(PIN_WIDTH / 2);
@@ -126,18 +87,62 @@ var updatePinCoordField = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   mainPin = document.querySelector('.map__pin--main');
-  mapPins = document.querySelector('.map__pins');
+  // mapPins = document.querySelector('.map__pins');
 
   disabledForm();
-  updatePinCoordField();
+  // updatePinCoordField();
+  // отключаем Drag браузера по умолчанию
+  mainPin.ondragstart = function () {
+    return false;
+  };
 
-  mainPin.addEventListener('click', function () {
-    drawPins(Labels);
-    showMap();
-    showForm();
+  var init = false;
+  mainPin.addEventListener('mousedown', function (e) {
+    var downX = e.clientX;
+    var downY = e.clientY;
+
+    // если dx и dy больше 3 то открываем форму
+    document.onmousemove = function (evt) {
+      var dx = evt.clientX - downX;
+      var dy = evt.clientY - downY;
+      if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
+        if (!init) {
+          drawPins(Labels);
+          showForm();
+          showMap();
+          init = true;
+        }
+
+        downX = evt.clientX;
+        downY = evt.clientY;
+
+        var newX = parseFloat(mainPin.style.left) + dx;
+        var newY = parseFloat(mainPin.style.top) + dy;
+        if (
+          newY > MAP_MAX_HEIGHT ||
+          newY < 130 ||
+          newX > 1140 ||
+          newX < 0
+          // newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
+          // newX < PIN_WIDTH / 2
+        ) {
+          return;
+        } else {
+          mainPin.style.left = newX + 'px';
+          mainPin.style.top = newY + 'px';
+          updatePinCoordField();
+        }
+      }
+    };
+
+    document.onmouseup = function () {
+      document.onmousemove = null;
+      document.onmouseup = null;
+      updatePinCoordField();
+    };
   });
 });
-
+// form
 var form = document.querySelector('.ad-form.ad-form--disabled');
 // валидация полей формы
 var priceOfNight = form.querySelector('#type');
