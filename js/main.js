@@ -75,7 +75,7 @@ var drawPins = function (data) {
 };
 
 var Labels = generateLabels(8);
-var mapPins;
+// var mapPins;
 
 var mainPin;
 
@@ -87,7 +87,7 @@ var updatePinCoordField = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   mainPin = document.querySelector('.map__pin--main');
-  mapPins = document.querySelector('.map__pins');
+  // mapPins = document.querySelector('.map__pins');
 
   disabledForm();
   updatePinCoordField();
@@ -121,8 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (
           newY > MAP_MAX_HEIGHT ||
           newY < 130 ||
-          newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-          newX < -PIN_WIDTH / 2
+          newX > 1150 ||
+          newX < 0
+          // newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
+          // newX < -PIN_WIDTH / 2
         ) {
           return;
         } else {
