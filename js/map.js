@@ -54,7 +54,6 @@
       var downY = e.clientY;
 
       // если dx и dy больше 3 то открываем форму
-      // если dx и dy больше 3 то открываем форму
       document.onmousemove = function (evt) {
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
