@@ -1,5 +1,11 @@
 ('use strict');
 (function () {
+  var Labels = [];
+  window.getAdverts(load);
+  function load(data) {
+    Labels = data;
+  }
+
   var showMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
@@ -24,10 +30,14 @@
     });
     mapPinsElement.appendChild(pinsFragment);
   };
-
-  var Labels = window.generateLabels(8);
   // var mapPins;
+  // function onLoadSuccess(data) {
+  //   console.log(data);
+  // }
 
+  // function onLoadError(data) {
+  //   console.log(data);
+  // }
   var mainPin;
 
   var updatePinCoordField = function () {
@@ -54,12 +64,12 @@
       var downY = e.clientY;
 
       // если dx и dy больше 3 то открываем форму
-      // если dx и dy больше 3 то открываем форму
       document.onmousemove = function (evt) {
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
           if (!init) {
+            // init = false
             drawPins(Labels);
             window.showForm();
             showMap();
