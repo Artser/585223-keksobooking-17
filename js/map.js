@@ -1,11 +1,33 @@
 ('use strict');
 (function () {
   var Labels = [];
+  var load = function (data) {
+    // Labels = data;
+    for (var item in data) {
+      if ('offer' in data[item]) {
+        Labels.push(data[item]);
+      }
+    }
+  };
   window.getAdverts(load);
-  function load(data) {
-    Labels = data;
-  }
+  // с консультации код
+  // Labels.forEach(function (value) {
+  //   var template = document.querySelector('#card').content;
+  //   var card = template.cloneNode(true);
+  //   var avatar = card.querySelector('.popup__avatar'); // получили аватар
+  //   avatar.setAttribute('src', value.author.avatar); // меняем атрибут src
+  //   var title = card.querySelector('.popup__title');
+  //   title.textContent = value.offer.title;
+  //   var photos = card.querySelector('.popup__photos');
+  //   var photo = card.querySelector('.popup__photo');
+  //   value.offer.photos.forEach(function (value2) {
+  //     var temp = photo.cloneNode(true);
+  //     temp.setAttribute('src', value2);
+  //     photos.appendChild(temp);
+  //   });
 
+  //   document.querySelector('.main').appendChild(card);
+  // });
   var showMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
@@ -57,7 +79,6 @@
     mainPin.ondragstart = function () {
       return false;
     };
-
     var init = false;
     mainPin.addEventListener('mousedown', function (e) {
       var downX = e.clientX;

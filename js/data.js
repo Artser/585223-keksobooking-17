@@ -17,26 +17,48 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
+    var errMess = function (textE) {
+      var errorTemplate = document
+        .querySelector('#error')
+        .content.querySelector('.error'); // ищем тег template и берем всего содержимое
+      var errorLog = errorTemplate.cloneNode(true);
+
+      var errText = errorLog.querySelector('.error__message');
+      var errButton = errorLog.querySelector('.error__button');
+
+      errText.textContent = textE;
+
+      // перезагрузка страницы при ошибке
+      errButton.addEventListener('click', function () {
+        location.reload();
+      });
+
+      document.querySelector('main').appendChild(errorLog);
+    };
+
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
         case 200:
           load(xhr.response);
-          return '200';
+          return;
         case 400:
-          return 'Неверный запрос';
+          errMess('Неверный запрос');
+          return;
         case 404:
-          return 'Ничего не найдено';
+          errMess('Что-то пошло не так! Произошла ошибка соединения');
+          return;
         default:
-          return 'Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText;
+          errMess('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
+          return;
       }
     });
+
     xhr.addEventListener('error', function () {
-      return 'Что-то пошло не так! Произошла ошибка соединения';
+      errMess('Что-то пошло не так! Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
-      return 'Запрос не успел выполниться за ' + xhr.timeout + 'мс';
+      errMess('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
-
     xhr.timeout = 10000;
 
     return xhr;
