@@ -1,5 +1,33 @@
 ('use strict');
 (function () {
+  var Labels = [];
+  var load = function (data) {
+    // Labels = data;
+    for (var item in data) {
+      if ('offer' in data[item]) {
+        Labels.push(data[item]);
+      }
+    }
+  };
+  window.getAdverts(load);
+  // с консультации код
+  // Labels.forEach(function (value) {
+  //   var template = document.querySelector('#card').content;
+  //   var card = template.cloneNode(true);
+  //   var avatar = card.querySelector('.popup__avatar'); // получили аватар
+  //   avatar.setAttribute('src', value.author.avatar); // меняем атрибут src
+  //   var title = card.querySelector('.popup__title');
+  //   title.textContent = value.offer.title;
+  //   var photos = card.querySelector('.popup__photos');
+  //   var photo = card.querySelector('.popup__photo');
+  //   value.offer.photos.forEach(function (value2) {
+  //     var temp = photo.cloneNode(true);
+  //     temp.setAttribute('src', value2);
+  //     photos.appendChild(temp);
+  //   });
+
+  //   document.querySelector('.main').appendChild(card);
+  // });
   var showMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
@@ -24,10 +52,14 @@
     });
     mapPinsElement.appendChild(pinsFragment);
   };
-
-  var Labels = window.generateLabels(8);
   // var mapPins;
+  // function onLoadSuccess(data) {
+  //   console.log(data);
+  // }
 
+  // function onLoadError(data) {
+  //   console.log(data);
+  // }
   var mainPin;
 
   var updatePinCoordField = function () {
@@ -47,19 +79,18 @@
     mainPin.ondragstart = function () {
       return false;
     };
-
     var init = false;
     mainPin.addEventListener('mousedown', function (e) {
       var downX = e.clientX;
       var downY = e.clientY;
 
       // если dx и dy больше 3 то открываем форму
-      // если dx и dy больше 3 то открываем форму
       document.onmousemove = function (evt) {
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
           if (!init) {
+            // init = false
             drawPins(Labels);
             window.showForm();
             showMap();
