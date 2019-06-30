@@ -1,39 +1,25 @@
 ('use strict');
 (function () {
   var Labels = [];
+
   var load = function (data) {
-    // Labels = data;
     for (var item in data) {
       if ('offer' in data[item]) {
         Labels.push(data[item]);
+        // load.slice(5, 10); // пытаюсь получить 5 меток
       }
     }
   };
   window.getAdverts(load);
-  // с консультации код
-  // Labels.forEach(function (value) {
-  //   var template = document.querySelector('#card').content;
-  //   var card = template.cloneNode(true);
-  //   var avatar = card.querySelector('.popup__avatar'); // получили аватар
-  //   avatar.setAttribute('src', value.author.avatar); // меняем атрибут src
-  //   var title = card.querySelector('.popup__title');
-  //   title.textContent = value.offer.title;
-  //   var photos = card.querySelector('.popup__photos');
-  //   var photo = card.querySelector('.popup__photo');
-  //   value.offer.photos.forEach(function (value2) {
-  //     var temp = photo.cloneNode(true);
-  //     temp.setAttribute('src', value2);
-  //     photos.appendChild(temp);
-  //   });
 
-  //   document.querySelector('.main').appendChild(card);
-  // });
+  window.Lab = Labels;
+
   var showMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
   };
 
-  var drawPin = function (dataobj) {
+  var drawPin = function (dataobj, n) {
     var template = document
       .querySelector('#pin')
       .content.querySelector('.map__pin'); // ищем тег template и берем всего содержимое
@@ -41,25 +27,22 @@
     pin.style.left = dataobj.location.x - window.PIN_WIDTH / 2 + 'px';
     pin.style.top = dataobj.location.y - window.PIN_HEIGHT + 'px';
     pin.querySelector('img').src = dataobj.author.avatar;
+    pin.setAttribute('data', n);
     return pin;
   };
 
   var drawPins = function (data) {
     var mapPinsElement = document.querySelector('.map__pins');
     var pinsFragment = document.createDocumentFragment();
+    var n = 0;
     data.forEach(function (obj) {
-      pinsFragment.appendChild(drawPin(obj));
+      pinsFragment.appendChild(drawPin(obj, n));
+      n++;
     });
+
     mapPinsElement.appendChild(pinsFragment);
   };
-  // var mapPins;
-  // function onLoadSuccess(data) {
-  //   console.log(data);
-  // }
 
-  // function onLoadError(data) {
-  //   console.log(data);
-  // }
   var mainPin;
 
   var updatePinCoordField = function () {
@@ -71,14 +54,14 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     mainPin = document.querySelector('.map__pin--main');
-    // mapPins = document.querySelector('.map__pins');
 
     window.disabledForm();
-    // updatePinCoordField();
+
     // отключаем Drag браузера по умолчанию
     mainPin.ondragstart = function () {
       return false;
     };
+
     var init = false;
     mainPin.addEventListener('mousedown', function (e) {
       var downX = e.clientX;
@@ -107,8 +90,6 @@
             newY < 130 ||
             newX > 1140 ||
             newX < 0
-            // newX > parseFloat(mapPins.style.height) - PIN_HEIGHT ||
-            // newX < PIN_WIDTH / 2
           ) {
             return;
           } else {
