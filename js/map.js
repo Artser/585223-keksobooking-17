@@ -2,15 +2,29 @@
 (function () {
   var Labels = [];
 
-  var load = function (data) {
+  var load = function (data, value) {
     for (var item in data) {
       if ('offer' in data[item]) {
         Labels.push(data[item]);
-        // load.slice(5, 10); // пытаюсь получить 5 меток
       }
     }
+    // отбираем значения по типу жилья
+    Labels = Labels.filter(function (currentValue) {
+      if (currentValue.offer.type === value || value === 'any') {
+        return true;
+      }
+      return false;
+    }).slice(0, 5); // пытаюсь получить 5 меток
+    drawPins(Labels);
   };
-  window.getAdverts(load);
+  // удаляем метки, чтобы отрисовать те что нам нужны
+  var removePins = function () {
+    document.querySelectorAll('.map__pin').forEach(function (val) {
+      if (!val.classList.contains('map__pin--main')) {
+        val.remove();
+      }
+    });
+  };
 
   window.Lab = Labels;
 
@@ -74,10 +88,11 @@
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
           if (!init) {
             // init = false
-            drawPins(Labels);
+            // drawPins(Labels);
             window.showForm();
             showMap();
             init = true;
+            window.getAdverts(load);
           }
 
           downX = evt.clientX;
@@ -108,13 +123,21 @@
         var dy = evt.clientY - downY;
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
           if (!init) {
-            drawPins(Labels);
+            // drawPins(Labels);
             window.showForm();
             showMap();
             init = true;
+            window.getAdverts(load);
           }
         }
       };
     });
+  });
+  // получем данные для фильтра тип жилья
+  var filterType = document.querySelector('#housing-type');
+  filterType.addEventListener('change', function (evt) {
+    var value = evt.target.value;
+    window.getAdverts(load, value); // вызываем функцию load и передаем тип жилья
+    removePins(); // удаляем все метки, чтобы загрузить нужные
   });
 })();

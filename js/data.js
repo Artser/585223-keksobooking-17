@@ -3,49 +3,30 @@
   window.PIN_WIDTH = 62;
   window.PIN_HEIGHT = 84;
   window.MAP_MAX_HEIGHT = 630;
+  var errMess = function (textE) {
+    var errorTemplate = document
+      .querySelector('#error')
+      .content.querySelector('.error'); // ищем тег template и берем всего содержимое
+    // создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы
+    var errorLog = errorTemplate.cloneNode(true);
 
-  var getResult = function (load) {
+    var errText = errorLog.querySelector('.error__message');
+    var errButton = errorLog.querySelector('.error__button');
+    // Создает новый *текстовый* узел с данным текстом
+    errText.textContent = textE;
+
+    // перезагрузка страницы при ошибке
+    errButton.addEventListener('click', function () {
+      location.reload();
+    });
+
+    // добавление элемента
+    document.querySelector('main').appendChild(errorLog);
+  };
+  var getResult = function () {
     // function getResult(load) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-
-    var errMess = function (textE) {
-      var errorTemplate = document
-        .querySelector('#error')
-        .content.querySelector('.error'); // ищем тег template и берем всего содержимое
-      // создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы
-      var errorLog = errorTemplate.cloneNode(true);
-
-      var errText = errorLog.querySelector('.error__message');
-      var errButton = errorLog.querySelector('.error__button');
-      // Создает новый *текстовый* узел с данным текстом
-      errText.textContent = textE;
-
-      // перезагрузка страницы при ошибке
-      errButton.addEventListener('click', function () {
-        location.reload();
-      });
-
-      // добавление элемента
-      document.querySelector('main').appendChild(errorLog);
-    };
-
-    xhr.addEventListener('load', function () {
-      switch (xhr.status) {
-        case 200:
-          load(xhr.response);
-          return;
-        case 400:
-          errMess('Неверный запрос');
-          return;
-        case 404:
-          errMess('Что-то пошло не так! Произошла ошибка соединения');
-          return;
-        default:
-          errMess('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
-          return;
-      }
-    });
 
     xhr.addEventListener('error', function () {
       errMess('Что-то пошло не так! Произошла ошибка соединения');
@@ -58,10 +39,29 @@
     return xhr;
   };
 
-  window.getAdverts = function (load) {
+  window.getAdverts = function (load, value) {
     var xhr = getResult(load);
     var url = 'https://js.dump.academy/keksobooking/data';
+    if (value === undefined) {
+      value = 'any';
+    }
 
+    xhr.addEventListener('load', function () {
+      switch (xhr.status) {
+        case 200:
+          load(xhr.response, value);
+          return;
+        case 400:
+          errMess('Неверный запрос');
+          return;
+        case 404:
+          errMess('Что-то пошло не так! Произошла ошибка соединения');
+          return;
+        default:
+          errMess('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
+          return;
+      }
+    });
     xhr.open('GET', url);
     xhr.send();
   };
