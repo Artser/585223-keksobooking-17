@@ -6,14 +6,14 @@
     form.classList.remove('ad-form--disabled');
 
     document
-      .querySelectorAll('form.ad-form fieldset')
+      .querySelectorAll('form.ad-form fieldset, .map__filters select, .map__filters fieldset')
       .forEach(function (element) {
         element.removeAttribute('disabled');
       });
   };
 
   window.disabledForm = function () {
-    document.querySelectorAll('form.ad-form fieldset').forEach(function (evt) {
+    document.querySelectorAll('form.ad-form fieldset, .map__filters select, .map__filters fieldset').forEach(function (evt) {
       evt.setAttribute('disabled', 'disabled');
     });
   };
