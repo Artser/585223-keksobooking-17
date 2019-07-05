@@ -38,16 +38,16 @@
 
     var timeIn = form.querySelector('#timein');
     var timeOut = form.querySelector('#timeout');
-    timeIn.addEventListener('change', function (evt) {
-      var value = evt.target.value;
-      if (value === '12:00') {
-        timeOut.value = '12:00';
-      } else if (value === '13:00') {
-        timeOut.value = '13:00';
-      } else if (value === '14:00') {
-        timeOut.value = '14:00';
-      }
-    });
+    // timeIn.addEventListener('change', function (evt) {
+    //   var value = evt.target.value;
+    //   if (value === '12:00') {
+    //     timeOut.value = '12:00';
+    //   } else if (value === '13:00') {
+    //     timeOut.value = '13:00';
+    //   } else if (value === '14:00') {
+    //     timeOut.value = '14:00';
+    //   }
+    // });
     timeOut.addEventListener('change', function (evt) {
       var value = evt.target.value;
       if (value === '12:00') {
