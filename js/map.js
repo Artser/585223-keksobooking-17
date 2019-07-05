@@ -140,4 +140,14 @@
     window.getAdverts(load, value); // вызываем функцию load и передаем тип жилья
     removePins(); // удаляем все метки, чтобы загрузить нужные
   });
+  // закрываем модальное окно клавишей esc
+  document.onkeydown = function (evt) {
+    evt = evt || window.event;
+    var cl = document.querySelector('.map__card');
+    if (evt.keyCode === 27 && cl) {
+      cl.remove();
+    }
+  };
+
+
 })();

@@ -44,30 +44,29 @@
 
     var timeIn = form.querySelector('#timein');
     var timeOut = form.querySelector('#timeout');
-    var roomNumber = form.querySelector('#room_number');
-    var capacity = form.querySelector('#capacity');
-    roomNumber.addEventListener('change', function (evt) {
+
+    // валидация комнат гостей
+    var filterRoom = document.querySelector('#room_number');
+    var filterQuests = document.querySelector('#capacity');
+
+    filterRoom.addEventListener('change', function (evt) {
       var value = evt.target.value;
-      if (value === '1') {
-        capacity.value = '1';
-      } else if (value === '2') {
-        capacity.value = '2';
-      } else if (value === '3') {
-        capacity.value = '3';
-      } else if (value === '100') {
-        capacity.value = '0';
+      var qtyQuests = filterQuests.options[filterQuests.selectedIndex].value;
+      if (value !== qtyQuests) {
+        filterRoom.setCustomValidity('Wrong!');
+        console.log('гости ' + qtyQuests);
+      } else {
+        filterRoom.setCustomValidity('Wrong');
       }
     });
-    capacity.addEventListener('change', function (evt) {
+    filterQuests.addEventListener('change', function (evt) {
       var value = evt.target.value;
-      if (value === '1') {
-        roomNumber.value = '1';
-      } else if (value === '2') {
-        roomNumber.value = '2';
-      } else if (value === '3') {
-        roomNumber.value = '3';
-      } else if (value === '0') {
-        roomNumber.value = '100';
+      var qtyRoom = filterQuests.options[filterRoom.selectedIndex].value;
+      if (value !== qtyRoom) {
+        filterQuests.setCustomValidity('Wrong!');
+        console.log('комнаты' + qtyRoom);
+      } else {
+        filterQuests.setCustomValidity('Wrong');
       }
     });
     timeIn.addEventListener('change', function (evt) {

@@ -23,6 +23,7 @@
     // добавление элемента
     document.querySelector('main').appendChild(errorLog);
   };
+
   var getResult = function () {
     // function getResult(load) {
     var xhr = new XMLHttpRequest();
@@ -37,6 +38,16 @@
     xhr.timeout = 10000;
 
     return xhr;
+  };
+  var er = document.querySelector('#error');
+
+  // ошибка отправки формы
+  er.onkeydown = function (evt) {
+    // evt = evt || window.event;
+    if (evt.keyCode === 27 && er) {
+      console.log('eror');
+      location.reload();
+    }
   };
 
   window.getAdverts = function (load, value) {
