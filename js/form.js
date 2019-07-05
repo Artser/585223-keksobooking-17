@@ -6,16 +6,22 @@
     form.classList.remove('ad-form--disabled');
 
     document
-      .querySelectorAll('form.ad-form fieldset, .map__filters select, .map__filters fieldset')
+      .querySelectorAll(
+          'form.ad-form fieldset, .map__filters select, .map__filters fieldset'
+      )
       .forEach(function (element) {
         element.removeAttribute('disabled');
       });
   };
 
   window.disabledForm = function () {
-    document.querySelectorAll('form.ad-form fieldset, .map__filters select, .map__filters fieldset').forEach(function (evt) {
-      evt.setAttribute('disabled', 'disabled');
-    });
+    document
+      .querySelectorAll(
+          'form.ad-form fieldset, .map__filters select, .map__filters fieldset'
+      )
+      .forEach(function (evt) {
+        evt.setAttribute('disabled', 'disabled');
+      });
   };
   // form
   document.addEventListener('DOMContentLoaded', function () {
@@ -38,16 +44,42 @@
 
     var timeIn = form.querySelector('#timein');
     var timeOut = form.querySelector('#timeout');
-    // timeIn.addEventListener('change', function (evt) {
-    //   var value = evt.target.value;
-    //   if (value === '12:00') {
-    //     timeOut.value = '12:00';
-    //   } else if (value === '13:00') {
-    //     timeOut.value = '13:00';
-    //   } else if (value === '14:00') {
-    //     timeOut.value = '14:00';
-    //   }
-    // });
+    var roomNumber = form.querySelector('#room_number');
+    var capacity = form.querySelector('#capacity');
+    roomNumber.addEventListener('change', function (evt) {
+      var value = evt.target.value;
+      if (value === '1') {
+        capacity.value = '1';
+      } else if (value === '2') {
+        capacity.value = '2';
+      } else if (value === '3') {
+        capacity.value = '3';
+      } else if (value === '100') {
+        capacity.value = '0';
+      }
+    });
+    capacity.addEventListener('change', function (evt) {
+      var value = evt.target.value;
+      if (value === '1') {
+        roomNumber.value = '1';
+      } else if (value === '2') {
+        roomNumber.value = '2';
+      } else if (value === '3') {
+        roomNumber.value = '3';
+      } else if (value === '0') {
+        roomNumber.value = '100';
+      }
+    });
+    timeIn.addEventListener('change', function (evt) {
+      var value = evt.target.value;
+      if (value === '12:00') {
+        timeOut.value = '12:00';
+      } else if (value === '13:00') {
+        timeOut.value = '13:00';
+      } else if (value === '14:00') {
+        timeOut.value = '14:00';
+      }
+    });
     timeOut.addEventListener('change', function (evt) {
       var value = evt.target.value;
       if (value === '12:00') {
