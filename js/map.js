@@ -1,7 +1,7 @@
 ('use strict');
 (function () {
   var Labels = [];
-
+  var init = false;
   var load = function (data, value) {
     for (var item in data) {
       if ('offer' in data[item]) {
@@ -49,14 +49,19 @@
   };
 
   // удаляем метки, чтобы отрисовать те что нам нужны
-  var removePins = function () {
+  window.removePins = function () {
     document.querySelectorAll('.map__pin').forEach(function (val) {
       if (!val.classList.contains('map__pin--main')) {
         val.remove();
       }
     });
   };
-
+  window.hiddenMap = function () {
+    var map = document.querySelector('.map');
+    map.classList.add('map--faded');
+    document.querySelector('.map__pin--main').style = 'left: 570px; top: 375px';
+    init = false;
+  };
   var showMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
@@ -111,7 +116,6 @@
       return false;
     };
 
-    var init = false;
     mainPin.addEventListener('mousedown', function (e) {
       var downX = e.clientX;
       var downY = e.clientY;
@@ -209,7 +213,7 @@
     };
 
     window.getAdverts(load, value); // вызываем функцию load и передаем тип жилья
-    removePins(); // удаляем все метки, чтобы загрузить нужные
+    window.removePins(); // удаляем все метки, чтобы загрузить нужные
   };
 
   filterInputsArr.forEach(function (ob) {
