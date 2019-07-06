@@ -23,7 +23,6 @@
         evt.setAttribute('disabled', 'disabled');
       });
     document.querySelector('.ad-form').classList.add('ad-form--disabled');
-
   };
 
   // form
@@ -78,7 +77,7 @@
       successLog.addEventListener('click', function () {
         successLog.remove();
       });
-
+      // закрытие успешной отправки формы
       var closeEsc = function (evt) {
         var cl = document.querySelector('.success');
         if (evt.keyCode === 27) {

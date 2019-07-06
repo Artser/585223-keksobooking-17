@@ -56,6 +56,7 @@
       }
     });
   };
+  // после отправки формы помещаем кружочек в центр
   window.hiddenMap = function () {
     var map = document.querySelector('.map');
     map.classList.add('map--faded');
@@ -85,10 +86,6 @@
     // var n = 0;
 
     data.forEach(function (obj) {
-      /*   проба функцией ES6 (но что подставлять вместо параметра?)
-      let index = window.Lab.findIndex(obj);
-      console.log(index);
-*/
       var n = data.indexOf(obj);
       pinsFragment.appendChild(drawPin(obj, n));
       // n++;
@@ -98,7 +95,7 @@
   };
 
   var mainPin;
-
+  // пишем координаты в поле адресс
   var updatePinCoordField = function () {
     var px =
       parseInt(mainPin.style.left, 10) + Math.floor(window.PIN_WIDTH / 2);
@@ -192,7 +189,7 @@
   var filterGuests = document.querySelector('#housing-guests');
 
   var filterInputsArr = document.querySelectorAll('#housing-features input');
-
+  // связываем в одну функцию для фильтрации
   var filterAll = function () {
     var price = filterPrice.value;
     var type = filterType.value;
@@ -203,7 +200,7 @@
         '#housing-features input:checked'
     );
     var features = getActiveFeature(filterInputsArr1);
-
+    // для фильтра
     var value = {
       price: price,
       type: type,
@@ -238,13 +235,6 @@
     filterAll();
   });
 
-  // получем данные для фильтра тип жилья
-  // var filterType = document.querySelector('#housing-type');
-  // filterType.addEventListener('change', function (evt) {
-  //   var value = evt.target.value;
-  //   window.getAdverts(load, value); // вызываем функцию load и передаем тип жилья
-  //   removePins(); // удаляем все метки, чтобы загрузить нужные
-  // });
   // закрываем модальное окно клавишей esc
   document.onkeydown = function (evt) {
     evt = evt || window.event;
