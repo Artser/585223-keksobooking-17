@@ -180,13 +180,4 @@
       val.remove();
     });
   };
-  var er = document.querySelector('#error');
-
-  // ошибка отправки формы
-  er.onkeydown = function (evt) {
-    // evt = evt || window.event;
-    if (evt.keyCode === 27 && er) {
-      location.reload();
-    }
-  };
 })();

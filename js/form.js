@@ -73,7 +73,8 @@
         .content.querySelector('.success'); // ищем тег template и берем всего содержимое
       // создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы
       var successLog = successTemplate.cloneNode(true);
-
+      // добавление элемента
+      document.querySelector('main').appendChild(successLog);
       var closeSuccess = function () {
         var cl = document.querySelector('.success');
         cl.remove();
@@ -103,8 +104,6 @@
       successLog.addEventListener('click', clickS);
 
       document.addEventListener('keydown', closeEsc);
-      // добавление элемента
-      document.querySelector('main').appendChild(successLog);
     };
 
     var ajaxErrorMess = function (textM) {
@@ -113,7 +112,8 @@
         .content.querySelector('.error'); // ищем тег template и берем всего содержимое
       // создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы
       var errorLog = errorTemplate.cloneNode(true);
-
+      // добавление элемента
+      document.querySelector('main').appendChild(errorLog);
       errorLog.querySelector('.error__message').textContent = textM;
 
       var errLogRem = function (kodKey) {
@@ -143,9 +143,6 @@
       document.addEventListener('keydown', function (evn) {
         errLogRem(evn.keyCode);
       });
-
-      // добавление элемента
-      document.querySelector('main').appendChild(errorLog);
     };
 
     window.clearPage = function () {
