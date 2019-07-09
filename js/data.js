@@ -162,6 +162,13 @@
       document.querySelector('.map__card').remove();
     });
 
+    // закрывает окно по нажатию esc
+
+    document.addEventListener('keydown', function (e) {
+      if (e.keyCode === 27 || e.keyCode === 13) {
+        document.querySelector('.map__card').remove();
+      }
+    });
     card1.querySelector('article').setAttribute('data', s);
 
     window.removeAllCards();

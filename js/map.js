@@ -170,7 +170,7 @@
     });
   });
 
-  // достать кликнутые элементы
+  // достать кликнутые элементы wifi и т.д
   var getActiveFeature = function (inp) {
     var inp1 = [];
     for (var i = 0; i < inp.length; i++) {
@@ -234,13 +234,4 @@
   filterGuests.addEventListener('change', function () {
     filterAll();
   });
-
-  // закрываем модальное окно клавишей esc
-  document.onkeydown = function (evt) {
-    evt = evt || window.event;
-    var cl = document.querySelector('.map__card');
-    if (evt.keyCode === 27 && cl) {
-      cl.remove();
-    }
-  };
 })();

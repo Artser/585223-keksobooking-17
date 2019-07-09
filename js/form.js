@@ -91,6 +91,8 @@
         }
       };
       document.addEventListener('keydown', closeEsc);
+      document.addEventListener('click', closeEsc);
+
       // добавление элемента
       document.querySelector('main').appendChild(successLog);
     };
@@ -144,7 +146,7 @@
 
       // отослать
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://js.dump.academy/keksobooking/');
+      xhr.open('POST', 'https://js.dump.academy/keksobooking/123');
       xhr.send(formData);
 
       xhr.onload = function () {
