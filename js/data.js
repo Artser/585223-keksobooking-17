@@ -40,10 +40,28 @@
   };
 
   window.getAdverts = function (load, value) {
-    var xhr = getResult(load);
-    var url = 'https://js.dump.academy/keksobooking/data';
     if (value === undefined) {
-      value = 'any';
+      value = {};
+    }
+    var xhr = getResult(load);
+
+    var url = 'https://js.dump.academy/keksobooking/data';
+
+    if (value.type === undefined) {
+      value.type = 'any';
+    }
+    if (value.price === undefined) {
+      value.price = 'any';
+    }
+    if (value.guests === undefined) {
+      value.guests = 'any';
+    }
+    if (value.rooms === undefined) {
+      value.rooms = 'any';
+    }
+
+    if (value.features === undefined) {
+      value.features = [];
     }
 
     xhr.addEventListener('load', function () {
@@ -146,13 +164,22 @@
 
     card1.querySelector('article').setAttribute('data', s);
 
-    removeAllCards();
+    window.removeAllCards();
     document.querySelector('.map').appendChild(card1);
   };
 
-  var removeAllCards = function () {
+  window.removeAllCards = function () {
     document.querySelectorAll('.map__card').forEach(function (val) {
       val.remove();
     });
+  };
+  var er = document.querySelector('#error');
+
+  // ошибка отправки формы
+  er.onkeydown = function (evt) {
+    // evt = evt || window.event;
+    if (evt.keyCode === 27 && er) {
+      location.reload();
+    }
   };
 })();
