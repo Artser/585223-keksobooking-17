@@ -162,6 +162,13 @@
       document.querySelector('.map__card').remove();
     });
 
+    // закрывает окно по нажатию esc
+
+    document.addEventListener('keydown', function (e) {
+      if (e.keyCode === 27 || e.keyCode === 13) {
+        document.querySelector('.map__card').remove();
+      }
+    });
     card1.querySelector('article').setAttribute('data', s);
 
     window.removeAllCards();
@@ -172,14 +179,5 @@
     document.querySelectorAll('.map__card').forEach(function (val) {
       val.remove();
     });
-  };
-  var er = document.querySelector('#error');
-
-  // ошибка отправки формы
-  er.onkeydown = function (evt) {
-    // evt = evt || window.event;
-    if (evt.keyCode === 27 && er) {
-      location.reload();
-    }
   };
 })();

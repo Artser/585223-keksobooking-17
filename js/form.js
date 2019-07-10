@@ -73,26 +73,37 @@
         .content.querySelector('.success'); // ищем тег template и берем всего содержимое
       // создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы
       var successLog = successTemplate.cloneNode(true);
-
-      successLog.addEventListener('click', function () {
-        successLog.remove();
-      });
-      // закрытие успешной отправки формы
-      var closeEsc = function (evt) {
-        var cl = document.querySelector('.success');
-        if (evt.keyCode === 27) {
-          cl.remove();
-          var form1 = document.querySelector('.ad-form');
-          form1.reset();
-          document.removeEventListener('keydown', closeEsc);
-          window.disabledForm();
-          window.removePins();
-          window.hiddenMap();
-        }
-      };
-      document.addEventListener('keydown', closeEsc);
       // добавление элемента
       document.querySelector('main').appendChild(successLog);
+      var closeSuccess = function () {
+        var cl = document.querySelector('.success');
+        cl.remove();
+        var form1 = document.querySelector('.ad-form');
+        form1.reset();
+        window.disabledForm();
+        window.removePins();
+        window.hiddenMap();
+      };
+
+      var clickS = function () {
+        closeClick();
+      };
+
+      var closeClick = function () {
+        closeSuccess();
+        document.removeEventListener('click', clickS);
+      };
+
+      var closeEsc = function (evt) {
+        if (evt.keyCode === 27 || evt.keyCode === 13) {
+          closeSuccess();
+          document.removeEventListener('keydown', closeEsc);
+        }
+      };
+
+      successLog.addEventListener('click', clickS);
+
+      document.addEventListener('keydown', closeEsc);
     };
 
     var ajaxErrorMess = function (textM) {
@@ -101,17 +112,37 @@
         .content.querySelector('.error'); // ищем тег template и берем всего содержимое
       // создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы
       var errorLog = errorTemplate.cloneNode(true);
-
+      // добавление элемента
+      document.querySelector('main').appendChild(errorLog);
       errorLog.querySelector('.error__message').textContent = textM;
+
+      var errLogRem = function (keyCode) {
+        // if (keyCode === undefined) {
+        //   keyCode = 0;
+        // }
+
+        if (keyCode === 27) {
+          errorLog.remove();
+        }
+      };
+
+      var errLogRem1 = function () {
+        errorLog.remove();
+      };
 
       errorLog
         .querySelector('.error__button')
         .addEventListener('click', function () {
-          errorLog.remove();
+          errLogRem();
         });
 
-      // добавление элемента
-      document.querySelector('main').appendChild(errorLog);
+      document.addEventListener('click', function () {
+        errLogRem1();
+      });
+
+      document.addEventListener('keydown', function (evn) {
+        errLogRem(evn.keyCode);
+      });
     };
 
     window.clearPage = function () {
@@ -136,6 +167,7 @@
           filterQuests.setCustomValidity('');
         }
       });
+
     form.addEventListener('submit', function (evnt) {
       evnt.preventDefault();
 
@@ -145,6 +177,7 @@
       // отослать
       var xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://js.dump.academy/keksobooking/');
+      // xhr.open('POST', 'https://dfhjkghsdfjkslghl.ru');
       xhr.send(formData);
 
       xhr.onload = function () {

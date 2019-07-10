@@ -11,7 +11,19 @@
     // отбираем значения по типу жилья
     Labels = Labels.filter(function (currentValue) {
       window.removeAllCards();
-
+      // if (currentValue.offer.type !== value.type && value.type !== 'any'){
+      // return false;
+      // }
+      // if (value.price === 'low' && (currentValue.offer.price < 10000 || currentValue.offer.price > 50000)){
+      // return false    }
+      // if ( currentValue.offer.rooms !== value.rooms &&
+      //   value.rooms !== 'any'{
+      // return false    }
+      // for (var i = 0; i < value.features.length; i++) {
+      //   if (!currentValue.offer.features.includes(value.features[i])) {
+      //     return false;
+      //   }
+      // }
       if (currentValue.offer.type === value.type || value.type === 'any') {
         if (
           (value.price === 'low' && currentValue.offer.price < 10000) ||
@@ -170,7 +182,7 @@
     });
   });
 
-  // достать кликнутые элементы
+  // достать кликнутые элементы wifi и т.д
   var getActiveFeature = function (inp) {
     var inp1 = [];
     for (var i = 0; i < inp.length; i++) {
@@ -208,8 +220,23 @@
       guests: guests,
       features: features
     };
+    var DEBOUNCE_INTERVAL = 500; // ms
 
-    window.getAdverts(load, value); // вызываем функцию load и передаем тип жилья
+    window.debounce = function (cb) {
+      var lastTimeout = null;
+
+      return function () {
+        var parameters = arguments;
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(function () {
+          cb.apply(null, parameters);
+        }, DEBOUNCE_INTERVAL);
+      };
+    };
+
+    window.getAdverts(window.debounce(load), value); // вызываем функцию load и передаем тип жилья
     window.removePins(); // удаляем все метки, чтобы загрузить нужные
   };
 
@@ -234,13 +261,4 @@
   filterGuests.addEventListener('change', function () {
     filterAll();
   });
-
-  // закрываем модальное окно клавишей esc
-  document.onkeydown = function (evt) {
-    evt = evt || window.event;
-    var cl = document.querySelector('.map__card');
-    if (evt.keyCode === 27 && cl) {
-      cl.remove();
-    }
-  };
 })();
