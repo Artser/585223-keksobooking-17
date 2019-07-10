@@ -116,12 +116,12 @@
       document.querySelector('main').appendChild(errorLog);
       errorLog.querySelector('.error__message').textContent = textM;
 
-      var errLogRem = function (kodKey) {
-        if (kodKey === undefined) {
-          kodKey = 0;
-        }
+      var errLogRem = function (keyCode) {
+        // if (keyCode === undefined) {
+        //   keyCode = 0;
+        // }
 
-        if (kodKey === 27 || kodKey === 0) {
+        if (keyCode === 27) {
           errorLog.remove();
         }
       };
