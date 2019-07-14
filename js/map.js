@@ -187,12 +187,12 @@
   });
 
   // достать кликнутые элементы wifi и т.д
-  var getActiveFeature = function (inp) {
-    var inp1 = [];
-    for (var i = 0; i < inp.length; i++) {
-      inp1.push(inp[i].value);
+  var getActiveFeature = function (inpFeatures) {
+    var inpClick = [];
+    for (var i = 0; i < inpFeatures.length; i++) {
+      inpClick.push(inpFeatures[i].value);
     }
-    return inp1;
+    return inpClick;
   };
 
   // получем данные для фильтра тип жилья
@@ -200,7 +200,6 @@
   var filterPrice = document.querySelector('#housing-price');
   var filterRooms = document.querySelector('#housing-rooms');
   var filterGuests = document.querySelector('#housing-guests');
-  // var filterInputsArr = document.querySelectorAll('#housing-features input');
 
   // связываем в одну функцию для фильтрации
   var filterAll = function () {
