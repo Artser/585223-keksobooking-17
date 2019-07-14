@@ -1,10 +1,9 @@
 ('use strict');
 (function () {
-  var Labels = [];
   // DEBOUNCE
   var DEBOUNCE_INTERVAL = 500; // ms
 
-  window.debounce = function (cb) {
+  var debounce = function (cb) {
     var lastTimeout = null;
 
     return function () {
@@ -19,13 +18,15 @@
   };
   var init = false;
   var load = function (data, value) {
+    window.Labels = [];
+    window.Lab = data;
     for (var item in data) {
       if ('offer' in data[item]) {
-        Labels.push(data[item]);
+        window.Labels.push(data[item]);
       }
     }
     // отбираем значения по типу жилья
-    Labels = Labels.filter(function (currentValue) {
+    window.Labels = window.Labels.filter(function (currentValue) {
       window.removeAllCards();
       if (currentValue.offer.type !== value.type && value.type !== 'any') {
         return false;
@@ -63,9 +64,7 @@
       return true;
     }).slice(0, 5); // пытаюсь получить 5 меток
 
-    window.Lab = Labels;
-
-    drawPins(Labels);
+    drawPins(window.Labels);
   };
 
   // удаляем метки, чтобы отрисовать те что нам нужны
@@ -75,14 +74,6 @@
         val.remove();
       }
     });
-  };
-
-  // после отправки формы помещаем кружочек в центр
-  window.hiddenMap = function () {
-    var map = document.querySelector('.map');
-    map.classList.add('map--faded');
-    document.querySelector('.map__pin--main').style = 'left: 570px; top: 375px';
-    init = false;
   };
 
   // открываем карту
@@ -102,16 +93,21 @@
     pin.setAttribute('data', n);
     return pin;
   };
+  // после отправки формы помещаем кружочек в центр
+  window.hiddenMap = function () {
+    var map = document.querySelector('.map');
+    map.classList.add('map--faded');
+    document.querySelector('.map__pin--main').style = 'left: 570px; top: 375px';
+    init = false;
+  };
 
   var drawPins = function (data) {
     var mapPinsElement = document.querySelector('.map__pins');
     var pinsFragment = document.createDocumentFragment();
-    // var n = 0;
 
     data.forEach(function (obj) {
       var n = data.indexOf(obj);
       pinsFragment.appendChild(drawPin(obj, n));
-      // n++;
     });
 
     mapPinsElement.appendChild(pinsFragment);
@@ -146,8 +142,6 @@
         var dy = evt.clientY - downY;
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
           if (!init) {
-            // init = false
-            // drawPins(Labels);
             window.showForm();
             showMap();
             init = true;
@@ -182,7 +176,6 @@
         var dy = evt.clientY - downY;
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
           if (!init) {
-            // drawPins(Labels);
             window.showForm();
             showMap();
             init = true;
@@ -230,29 +223,15 @@
       features: features
     };
 
-    window.getAdverts(window.debounce(load), value); // вызываем функцию load и передаем тип жилья
     window.removePins(); // удаляем все метки, чтобы загрузить нужные
+
+    var debounceLoad = debounce(load);
+    debounceLoad(window.Lab, value);
   };
 
   document
     .querySelector('.map__filters')
     .addEventListener('change', function () {
       filterAll();
-      // filterInputsArr.forEach(function (ob) {
-      //   ob.addEventListener('change', function () {
-      //     filterAll();
-      //   });
-      // });
-      // filterPrice.addEventListener('change', function () {
-      //   filterAll();
-      // });
-      // filterType.addEventListener('change', function () {
-      //   filterAll();
-      // });
-      // filterRooms.addEventListener('change', function () {
-      //   filterAll();
-      // });
-      // filterGuests.addEventListener('change', function () {
-      //   filterAll();
     });
 })();

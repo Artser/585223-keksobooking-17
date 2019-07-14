@@ -3,7 +3,7 @@
   window.PIN_WIDTH = 62;
   window.PIN_HEIGHT = 84;
   window.MAP_MAX_HEIGHT = 630;
-  var errMess = function (textE) {
+  var errMess = function (textErr) {
     var errorTemplate = document
       .querySelector('#error')
       .content.querySelector('.error'); // ищем тег template и берем всего содержимое
@@ -13,7 +13,7 @@
     var errText = errorLog.querySelector('.error__message');
     var errButton = errorLog.querySelector('.error__button');
     // Создает новый *текстовый* узел с данным текстом
-    errText.textContent = textE;
+    errText.textContent = textErr;
 
     // перезагрузка страницы при ошибке
     errButton.addEventListener('click', function () {
@@ -84,7 +84,6 @@
     xhr.send();
   };
 
-  // document.querySelector('.map__pins').onclick = function (event) {
   document.querySelector('.map__pins').addEventListener('click', function () {
     var target = event.target; // где был клик?
     // клик для открытия модального окна нужного пина
@@ -98,13 +97,13 @@
   });
 
   // ЗАПОЛНЯЕМ модальное окно информацией
-  var card = function (obj1) {
+  var card = function (newObj) {
     var template = document.querySelector('#card').content;
-    var newData = obj1.getAttribute('data'); // получает значение атрибута
+    var newData = newObj.getAttribute('data'); // получает значение атрибута
 
-    var value = window.Lab[newData]; // была S
+    var value = window.Labels[newData];
 
-    var cardClone = template.cloneNode(true); // была Card1
+    var cardClone = template.cloneNode(true);
 
     var avatar = cardClone.querySelector('.popup__avatar'); // получили аватар
     avatar.setAttribute('src', value.author.avatar); // меняем атрибут src
@@ -157,20 +156,29 @@
       temp.setAttribute('src', photoImg);
       photos.appendChild(temp);
     });
+    photo.remove();
 
     // закрываем окно с информацией при клике
+
+    var popupClose = function (evt) {
+      document.querySelector('.map__card').remove();
+      evt.target.removeEventListener('click', popupClose);
+    };
+
     cardClone
       .querySelector('.popup__close')
-      .addEventListener('click', function () {
-        document.querySelector('.map__card').remove();
-      });
+      .addEventListener('click', popupClose);
 
     // закрывает окно по нажатию esc
-    document.addEventListener('keydown', function (evt) {
+
+    var popupCloseEsc = function (evt) {
       if (evt.keyCode === 27 || evt.keyCode === 13) {
         document.querySelector('.map__card').remove();
+        document.removeEventListener('keydown', popupCloseEsc);
       }
-    });
+    };
+    document.addEventListener('keydown', popupCloseEsc);
+
     cardClone.querySelector('article').setAttribute('data', newData);
 
     window.removeAllCards();

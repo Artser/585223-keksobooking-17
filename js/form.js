@@ -86,13 +86,9 @@
         window.hiddenMap();
       };
 
-      var clickS = function () {
-        closeClick();
-      };
-
       var closeClick = function () {
         closeSuccess();
-        document.removeEventListener('click', clickS);
+        document.removeEventListener('click', closeClick);
       };
 
       var closeEsc = function (evt) {
@@ -102,7 +98,7 @@
         }
       };
 
-      successLog.addEventListener('click', clickS);
+      successLog.addEventListener('click', closeClick);
 
       document.addEventListener('keydown', closeEsc);
     };
@@ -118,16 +114,12 @@
       errorLog.querySelector('.error__message').textContent = textM;
 
       var errLogRem = function (keyCode) {
-        // if (keyCode === undefined) {
-        //   keyCode = 0;
-        // }
-
         if (keyCode === 27) {
           errorLog.remove();
         }
       };
 
-      var errLogRem1 = function () {
+      var errRemove = function () {
         errorLog.remove();
       };
 
@@ -138,7 +130,7 @@
         });
 
       document.addEventListener('click', function () {
-        errLogRem1();
+        errRemove();
       });
 
       document.addEventListener('keydown', function (evn) {
@@ -147,7 +139,7 @@
     };
 
     window.clearPage = function () {
-      formSuccess.reset(); // была form1
+      formSuccess.reset();
       window.disabledForm();
     };
 
@@ -176,7 +168,6 @@
       // отослать
       var xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://js.dump.academy/keksobooking/');
-      // xhr.open('POST', 'https://dfhjkghsdfjkslghl.ru');
       xhr.send(formData);
 
       xhr.addEventListener('load', function () {
