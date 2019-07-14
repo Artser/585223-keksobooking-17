@@ -84,8 +84,8 @@
     xhr.send();
   };
 
-  document.querySelector('.map__pins').onclick = function (event) {
-    // document.querySelector('.map__pins').addEventListener('click', function (){!!!!!!!!!!!!!!!!
+  // document.querySelector('.map__pins').onclick = function (event) {
+  document.querySelector('.map__pins').addEventListener('click', function () {
     var target = event.target; // где был клик?
     // клик для открытия модального окна нужного пина
     while (target.classList.value !== 'map__pins') {
@@ -95,14 +95,14 @@
       }
       target = target.parentNode;
     }
-  };
+  });
 
   // ЗАПОЛНЯЕМ модальное окно информацией
   var card = function (obj1) {
     var template = document.querySelector('#card').content;
     var newData = obj1.getAttribute('data'); // получает значение атрибута
 
-    var value = window.Lab[newData];// была S
+    var value = window.Lab[newData]; // была S
 
     var cardClone = template.cloneNode(true); // была Card1
 
@@ -125,8 +125,8 @@
     textCapacity.textContent =
       value.offer.rooms + ' комнаты для ' + value.offer.guests + ' гостей';
 
-    var textType2 = cardClone.querySelector('.popup__text--time');
-    textType2.textContent =
+    var textTime = cardClone.querySelector('.popup__text--time');
+    textTime.textContent =
       'Заезд после ' +
       value.offer.checkin +
       ' , выезд до ' +
@@ -135,14 +135,14 @@
     var ulFeatures = cardClone.querySelector('.popup__features');
     var ulFeature = cardClone.querySelectorAll('.popup__feature');
 
-    ulFeature.forEach(function (value3) {
-      value3.parentNode.removeChild(value3);
+    ulFeature.forEach(function (valueFeature) {
+      valueFeature.parentNode.removeChild(valueFeature);
     });
 
-    value.offer.features.forEach(function (value4) {
+    value.offer.features.forEach(function (valueIcon) {
       var liF = document.createElement('li');
       liF.classList.add('popup__feature'); // добавляет класс
-      liF.classList.add('popup__feature--' + value4);
+      liF.classList.add('popup__feature--' + valueIcon);
 
       ulFeatures.appendChild(liF); // добавлем элемент иконку с удобствами
     });
@@ -152,9 +152,9 @@
 
     var photos = cardClone.querySelector('.popup__photos');
     var photo = cardClone.querySelector('.popup__photo');
-    value.offer.photos.forEach(function (value2) {
+    value.offer.photos.forEach(function (photoImg) {
       var temp = photo.cloneNode(true);
-      temp.setAttribute('src', value2);
+      temp.setAttribute('src', photoImg);
       photos.appendChild(temp);
     });
 
@@ -164,7 +164,6 @@
       .addEventListener('click', function () {
         document.querySelector('.map__card').remove();
       });
-
 
     // закрывает окно по нажатию esc
     document.addEventListener('keydown', function (evt) {

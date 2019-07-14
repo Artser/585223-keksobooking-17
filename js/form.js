@@ -75,10 +75,11 @@
       var successLog = successTemplate.cloneNode(true);
       // добавление элемента
       document.querySelector('main').appendChild(successLog);
+
+      // успешно отправлено - обновляем и стираем
       var closeSuccess = function () {
         var cl = document.querySelector('.success');
         cl.remove();
-
         formSuccess.reset();
         window.disabledForm();
         window.removePins();
