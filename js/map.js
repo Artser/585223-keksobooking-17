@@ -16,9 +16,16 @@
       // }
       // if (value.price === 'low' && (currentValue.offer.price < 10000 || currentValue.offer.price > 50000)){
       // return false    }
+      // if (value.price === 'middle' && (currentValue.offer.price >= 10000 &&
+      //   currentValue.offer.price < 50000)){
+      // return false    }
       // if ( currentValue.offer.rooms !== value.rooms &&
       //   value.rooms !== 'any'{
       // return false    }
+      // if (
+      //   currentValue.offer.guests.toString() !== value.guests &&
+      //   value.guests !== 'any'
+      // ) {
       // for (var i = 0; i < value.features.length; i++) {
       //   if (!currentValue.offer.features.includes(value.features[i])) {
       //     return false;
@@ -68,6 +75,7 @@
       }
     });
   };
+
   // после отправки формы помещаем кружочек в центр
   window.hiddenMap = function () {
     var map = document.querySelector('.map');
@@ -75,6 +83,8 @@
     document.querySelector('.map__pin--main').style = 'left: 570px; top: 375px';
     init = false;
   };
+
+  // открываем карту
   var showMap = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
@@ -193,14 +203,11 @@
 
   // получем данные для фильтра тип жилья
   var filterType = document.querySelector('#housing-type');
-
   var filterPrice = document.querySelector('#housing-price');
-
   var filterRooms = document.querySelector('#housing-rooms');
-
   var filterGuests = document.querySelector('#housing-guests');
-
   var filterInputsArr = document.querySelectorAll('#housing-features input');
+
   // связываем в одну функцию для фильтрации
   var filterAll = function () {
     var price = filterPrice.value;
@@ -212,6 +219,7 @@
         '#housing-features input:checked'
     );
     var features = getActiveFeature(filterInputsArr1);
+
     // для фильтра
     var value = {
       price: price,
@@ -220,6 +228,8 @@
       guests: guests,
       features: features
     };
+
+    // DEBOUNCE
     var DEBOUNCE_INTERVAL = 500; // ms
 
     window.debounce = function (cb) {

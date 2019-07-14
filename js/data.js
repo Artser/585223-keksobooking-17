@@ -85,6 +85,7 @@
   };
 
   document.querySelector('.map__pins').onclick = function (event) {
+    // document.querySelector('.map__pins').addEventListener('click', function (){!!!!!!!!!!!!!!!!
     var target = event.target; // где был клик?
     // клик для открытия модального окна нужного пина
     while (target.classList.value !== 'map__pins') {
@@ -99,40 +100,40 @@
   // ЗАПОЛНЯЕМ модальное окно информацией
   var card = function (obj1) {
     var template = document.querySelector('#card').content;
-    var s = obj1.getAttribute('data'); // получает значение атрибута
+    var newData = obj1.getAttribute('data'); // получает значение атрибута
 
-    var value = window.Lab[s];
+    var value = window.Lab[newData];// была S
 
-    var card1 = template.cloneNode(true);
+    var cardClone = template.cloneNode(true); // была Card1
 
-    var avatar = card1.querySelector('.popup__avatar'); // получили аватар
+    var avatar = cardClone.querySelector('.popup__avatar'); // получили аватар
     avatar.setAttribute('src', value.author.avatar); // меняем атрибут src
 
-    var title = card1.querySelector('.popup__title');
+    var title = cardClone.querySelector('.popup__title');
     title.textContent = value.offer.title;
 
-    var textAddress = card1.querySelector('.popup__text--address');
+    var textAddress = cardClone.querySelector('.popup__text--address');
     textAddress.textContent = value.offer.address;
 
-    var textPrice = card1.querySelector('.popup__text--price');
+    var textPrice = cardClone.querySelector('.popup__text--price');
     textPrice.textContent = value.offer.price + ' руб/ночь';
 
-    var textType = card1.querySelector('.popup__type');
+    var textType = cardClone.querySelector('.popup__type');
     textType.textContent = value.offer.type;
 
-    var textCapacity = card1.querySelector('.popup__text--capacity');
+    var textCapacity = cardClone.querySelector('.popup__text--capacity');
     textCapacity.textContent =
       value.offer.rooms + ' комнаты для ' + value.offer.guests + ' гостей';
 
-    var textType2 = card1.querySelector('.popup__text--time');
+    var textType2 = cardClone.querySelector('.popup__text--time');
     textType2.textContent =
       'Заезд после ' +
       value.offer.checkin +
       ' , выезд до ' +
       value.offer.checkout;
 
-    var ulFeatures = card1.querySelector('.popup__features');
-    var ulFeature = card1.querySelectorAll('.popup__feature');
+    var ulFeatures = cardClone.querySelector('.popup__features');
+    var ulFeature = cardClone.querySelectorAll('.popup__feature');
 
     ulFeature.forEach(function (value3) {
       value3.parentNode.removeChild(value3);
@@ -146,11 +147,11 @@
       ulFeatures.appendChild(liF); // добавлем элемент иконку с удобствами
     });
 
-    var textDescription = card1.querySelector('.popup__description');
+    var textDescription = cardClone.querySelector('.popup__description');
     textDescription.textContent = value.offer.description;
 
-    var photos = card1.querySelector('.popup__photos');
-    var photo = card1.querySelector('.popup__photo');
+    var photos = cardClone.querySelector('.popup__photos');
+    var photo = cardClone.querySelector('.popup__photo');
     value.offer.photos.forEach(function (value2) {
       var temp = photo.cloneNode(true);
       temp.setAttribute('src', value2);
@@ -158,21 +159,23 @@
     });
 
     // закрываем окно с информацией при клике
-    card1.querySelector('.popup__close').addEventListener('click', function () {
-      document.querySelector('.map__card').remove();
-    });
+    cardClone
+      .querySelector('.popup__close')
+      .addEventListener('click', function () {
+        document.querySelector('.map__card').remove();
+      });
+
 
     // закрывает окно по нажатию esc
-
-    document.addEventListener('keydown', function (e) {
-      if (e.keyCode === 27 || e.keyCode === 13) {
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === 27 || evt.keyCode === 13) {
         document.querySelector('.map__card').remove();
       }
     });
-    card1.querySelector('article').setAttribute('data', s);
+    cardClone.querySelector('article').setAttribute('data', newData);
 
     window.removeAllCards();
-    document.querySelector('.map').appendChild(card1);
+    document.querySelector('.map').appendChild(cardClone);
   };
 
   window.removeAllCards = function () {

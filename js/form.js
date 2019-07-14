@@ -66,7 +66,7 @@
         timeIn.value = '14:00';
       }
     });
-
+    var formSuccess = document.querySelector('.ad-form');
     var ajaxSuccessMess = function () {
       var successTemplate = document
         .querySelector('#success')
@@ -78,8 +78,8 @@
       var closeSuccess = function () {
         var cl = document.querySelector('.success');
         cl.remove();
-        var form1 = document.querySelector('.ad-form');
-        form1.reset();
+
+        formSuccess.reset();
         window.disabledForm();
         window.removePins();
         window.hiddenMap();
@@ -146,9 +146,7 @@
     };
 
     window.clearPage = function () {
-      var form1 = document.querySelector('.ad-form');
-      form1.reset();
-
+      formSuccess.reset(); // была form1
       window.disabledForm();
     };
 
