@@ -1,6 +1,22 @@
 ('use strict');
 (function () {
   var Labels = [];
+  // DEBOUNCE
+  var DEBOUNCE_INTERVAL = 500; // ms
+
+  window.debounce = function (cb) {
+    var lastTimeout = null;
+
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
+  };
   var init = false;
   var load = function (data, value) {
     for (var item in data) {
@@ -11,55 +27,40 @@
     // отбираем значения по типу жилья
     Labels = Labels.filter(function (currentValue) {
       window.removeAllCards();
-      // if (currentValue.offer.type !== value.type && value.type !== 'any'){
-      // return false;
-      // }
-      // if (value.price === 'low' && (currentValue.offer.price < 10000 || currentValue.offer.price > 50000)){
-      // return false    }
-      // if (value.price === 'middle' && (currentValue.offer.price >= 10000 &&
-      //   currentValue.offer.price < 50000)){
-      // return false    }
-      // if ( currentValue.offer.rooms !== value.rooms &&
-      //   value.rooms !== 'any'{
-      // return false    }
-      // if (
-      //   currentValue.offer.guests.toString() !== value.guests &&
-      //   value.guests !== 'any'
-      // ) {
-      // for (var i = 0; i < value.features.length; i++) {
-      //   if (!currentValue.offer.features.includes(value.features[i])) {
-      //     return false;
-      //   }
-      // }
-      if (currentValue.offer.type === value.type || value.type === 'any') {
-        if (
-          (value.price === 'low' && currentValue.offer.price < 10000) ||
-          (value.price === 'middle' &&
-            currentValue.offer.price >= 10000 &&
-            currentValue.offer.price < 50000) ||
-          (value.price === 'high' && currentValue.offer.price >= 50000) ||
-          value.price === 'any'
-        ) {
-          if (
-            currentValue.offer.rooms.toString() === value.rooms ||
-            value.rooms === 'any'
-          ) {
-            if (
-              currentValue.offer.guests.toString() === value.guests ||
-              value.guests === 'any'
-            ) {
-              for (var i = 0; i < value.features.length; i++) {
-                if (!currentValue.offer.features.includes(value.features[i])) {
-                  return false;
-                }
-              }
-              return true;
-            }
-          }
-        }
+      if (currentValue.offer.type !== value.type && value.type !== 'any') {
+        return false;
+      }
+      if (value.price === 'low' && currentValue.offer.price > 10000) {
+        return false;
+      }
+      if (
+        value.price === 'middle' &&
+        (currentValue.offer.price <= 10000 || currentValue.offer.price > 50000)
+      ) {
+        return false;
+      }
+      if (value.price === 'high' && currentValue.offer.price < 50000) {
+        return false;
       }
 
-      return false;
+      if (
+        currentValue.offer.rooms !== parseInt(value.rooms, 10) &&
+        value.rooms !== 'any'
+      ) {
+        return false;
+      }
+      if (
+        currentValue.offer.guests !== parseInt(value.guests, 10) &&
+        value.guests !== 'any'
+      ) {
+        return false;
+      }
+      for (var i = 0; i < value.features.length; i++) {
+        if (!currentValue.offer.features.includes(value.features[i])) {
+          return false;
+        }
+      }
+      return true;
     }).slice(0, 5); // пытаюсь получить 5 меток
 
     window.Lab = Labels;
@@ -206,7 +207,7 @@
   var filterPrice = document.querySelector('#housing-price');
   var filterRooms = document.querySelector('#housing-rooms');
   var filterGuests = document.querySelector('#housing-guests');
-  var filterInputsArr = document.querySelectorAll('#housing-features input');
+  // var filterInputsArr = document.querySelectorAll('#housing-features input');
 
   // связываем в одну функцию для фильтрации
   var filterAll = function () {
@@ -229,46 +230,29 @@
       features: features
     };
 
-    // DEBOUNCE
-    var DEBOUNCE_INTERVAL = 500; // ms
-
-    window.debounce = function (cb) {
-      var lastTimeout = null;
-
-      return function () {
-        var parameters = arguments;
-        if (lastTimeout) {
-          window.clearTimeout(lastTimeout);
-        }
-        lastTimeout = window.setTimeout(function () {
-          cb.apply(null, parameters);
-        }, DEBOUNCE_INTERVAL);
-      };
-    };
-
     window.getAdverts(window.debounce(load), value); // вызываем функцию load и передаем тип жилья
     window.removePins(); // удаляем все метки, чтобы загрузить нужные
   };
 
-  filterInputsArr.forEach(function (ob) {
-    ob.addEventListener('change', function () {
+  document
+    .querySelector('.map__filters')
+    .addEventListener('change', function () {
       filterAll();
+      // filterInputsArr.forEach(function (ob) {
+      //   ob.addEventListener('change', function () {
+      //     filterAll();
+      //   });
+      // });
+      // filterPrice.addEventListener('change', function () {
+      //   filterAll();
+      // });
+      // filterType.addEventListener('change', function () {
+      //   filterAll();
+      // });
+      // filterRooms.addEventListener('change', function () {
+      //   filterAll();
+      // });
+      // filterGuests.addEventListener('change', function () {
+      //   filterAll();
     });
-  });
-
-  filterPrice.addEventListener('change', function () {
-    filterAll();
-  });
-
-  filterType.addEventListener('change', function () {
-    filterAll();
-  });
-
-  filterRooms.addEventListener('change', function () {
-    filterAll();
-  });
-
-  filterGuests.addEventListener('change', function () {
-    filterAll();
-  });
 })();

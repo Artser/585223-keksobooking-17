@@ -179,7 +179,7 @@
       // xhr.open('POST', 'https://dfhjkghsdfjkslghl.ru');
       xhr.send(formData);
 
-      xhr.onload = function () {
+      xhr.addEventListener('load', function () {
         switch (xhr.status) {
           case 200:
             ajaxSuccessMess();
@@ -193,7 +193,7 @@
             );
             return;
         }
-      };
+      });
 
       xhr.onerror = function () {
         ajaxErrorMess('Ошибка ' + this.status);
