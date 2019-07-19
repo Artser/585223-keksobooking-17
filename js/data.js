@@ -24,7 +24,6 @@
     document.querySelector('main').appendChild(errorLog);
   };
   var getResult = function () {
-    // function getResult(load) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -89,7 +88,7 @@
     // клик для открытия модального окна нужного пина
     while (target.classList.value !== 'map__pins') {
       if (target.classList.value === 'map__pin') {
-        card(target);
+        createModal(target);
         return;
       }
       target = target.parentNode;
@@ -97,7 +96,7 @@
   });
 
   // ЗАПОЛНЯЕМ модальное окно информацией
-  var card = function (newObj) {
+  var createModal = function (newObj) {
     var template = document.querySelector('#card').content;
     var newData = newObj.getAttribute('data'); // получает значение атрибута
 
@@ -131,19 +130,19 @@
       ' , выезд до ' +
       value.offer.checkout;
 
-    var ulFeatures = cardClone.querySelector('.popup__features');
-    var ulFeature = cardClone.querySelectorAll('.popup__feature');
+    var mainFeatures = cardClone.querySelector('.popup__features');
+    var newFeatures = cardClone.querySelectorAll('.popup__feature');
 
-    ulFeature.forEach(function (valueFeature) {
+    newFeatures.forEach(function (valueFeature) {
       valueFeature.parentNode.removeChild(valueFeature);
     });
 
     value.offer.features.forEach(function (valueIcon) {
-      var liF = document.createElement('li');
-      liF.classList.add('popup__feature'); // добавляет класс
-      liF.classList.add('popup__feature--' + valueIcon);
+      var newFeature = document.createElement('li');
+      newFeature.classList.add('popup__feature'); // добавляет класс
+      newFeature.classList.add('popup__feature--' + valueIcon);
 
-      ulFeatures.appendChild(liF); // добавлем элемент иконку с удобствами
+      mainFeatures.appendChild(newFeature); // добавлем элемент иконку с удобствами
     });
 
     var textDescription = cardClone.querySelector('.popup__description');
@@ -160,14 +159,14 @@
 
     // закрываем окно с информацией при клике
 
-    var popupClose = function (evt) {
+    window.popupClose = function (evt) {
       document.querySelector('.map__card').remove();
-      evt.target.removeEventListener('click', popupClose);
+      evt.target.removeEventListener('click', window.popupClose);
     };
 
     cardClone
       .querySelector('.popup__close')
-      .addEventListener('click', popupClose);
+      .addEventListener('click', window.popupClose);
 
     // закрывает окно по нажатию esc
 

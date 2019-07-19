@@ -66,8 +66,9 @@
         timeIn.value = '14:00';
       }
     });
+
     var formSuccess = document.querySelector('.ad-form');
-    var ajaxSuccessMess = function () {
+    var treatSuccessMess = function () {
       var successTemplate = document
         .querySelector('#success')
         .content.querySelector('.success'); // ищем тег template и берем всего содержимое
@@ -83,7 +84,8 @@
         formSuccess.reset();
         window.disabledForm();
         window.removePins();
-        window.hiddenMap();
+        window.movePin();
+        window.popupClose();
       };
 
       var closeClick = function () {
@@ -103,7 +105,7 @@
       document.addEventListener('keydown', closeEsc);
     };
 
-    var ajaxErrorMess = function (textM) {
+    var treatErrorMess = function (textM) {
       var errorTemplate = document
         .querySelector('#error')
         .content.querySelector('.error'); // ищем тег template и берем всего содержимое
@@ -113,7 +115,7 @@
       document.querySelector('main').appendChild(errorLog);
       errorLog.querySelector('.error__message').textContent = textM;
 
-      var errLogRem = function (keyCode) {
+      var errEsc = function (keyCode) {
         if (keyCode === 27) {
           errorLog.remove();
         }
@@ -126,7 +128,7 @@
       errorLog
         .querySelector('.error__button')
         .addEventListener('click', function () {
-          errLogRem();
+          errEsc();
         });
 
       document.addEventListener('click', function () {
@@ -134,7 +136,7 @@
       });
 
       document.addEventListener('keydown', function (evn) {
-        errLogRem(evn.keyCode);
+        errEsc(evn.keyCode);
       });
     };
 
@@ -173,13 +175,13 @@
       xhr.addEventListener('load', function () {
         switch (xhr.status) {
           case 200:
-            ajaxSuccessMess();
+            treatSuccessMess();
             return;
           case 400:
-            ajaxErrorMess('Неверный запрос');
+            treatErrorMess('Неверный запрос');
             return;
           default:
-            ajaxErrorMess(
+            treatErrorMess(
                 'Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText
             );
             return;
@@ -187,7 +189,7 @@
       });
 
       xhr.onerror = function () {
-        ajaxErrorMess('Ошибка ' + this.status);
+        treatErrorMess('Ошибка ' + this.status);
       };
     });
   });

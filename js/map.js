@@ -94,7 +94,7 @@
     return pin;
   };
   // после отправки формы помещаем кружочек в центр
-  window.hiddenMap = function () {
+  window.movePin = function () {
     var map = document.querySelector('.map');
     map.classList.add('map--faded');
     document.querySelector('.map__pin--main').style = 'left: 570px; top: 375px';
@@ -106,8 +106,8 @@
     var pinsFragment = document.createDocumentFragment();
 
     data.forEach(function (obj) {
-      var n = data.indexOf(obj);
-      pinsFragment.appendChild(drawPin(obj, n));
+      var newIndex = data.indexOf(obj);
+      pinsFragment.appendChild(drawPin(obj, newIndex));
     });
 
     mapPinsElement.appendChild(pinsFragment);
@@ -131,46 +131,55 @@
     mainPin.ondragstart = function () {
       return false;
     };
-
+    var isDown = false;
     mainPin.addEventListener('mousedown', function (e) {
+      isDown = true;
       var downX = e.clientX;
       var downY = e.clientY;
 
       // если dx и dy больше 3 то открываем форму
-      document.onmousemove = function (evt) {
-        var dx = evt.clientX - downX;
-        var dy = evt.clientY - downY;
-        if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
-          if (!init) {
-            window.showForm();
-            showMap();
-            init = true;
-            window.getAdverts(load);
-          }
+      var mouseMove = function () {
+        document.addEventListener('mousemove', function (evt) {
+          if (isDown) {
+            var dx = evt.clientX - downX;
+            var dy = evt.clientY - downY;
+            if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
+              if (!init) {
+                window.showForm();
+                showMap();
+                init = true;
+                window.getAdverts(load);
+              }
 
-          downX = evt.clientX;
-          downY = evt.clientY;
+              downX = evt.clientX;
+              downY = evt.clientY;
 
-          var newX = parseFloat(mainPin.style.left) + dx;
-          var newY = parseFloat(mainPin.style.top) + dy;
-          if (
-            newY > window.MAP_MAX_HEIGHT ||
-            newY < 130 ||
-            newX > 1140 ||
-            newX < 0
-          ) {
-            return;
-          } else {
-            mainPin.style.left = newX + 'px';
-            mainPin.style.top = newY + 'px';
-            updatePinCoordField();
+              var newX = parseFloat(mainPin.style.left) + dx;
+              var newY = parseFloat(mainPin.style.top) + dy;
+              if (
+                newY > window.MAP_MAX_HEIGHT ||
+                newY < 130 ||
+                newX > 1140 ||
+                newX < 0
+              ) {
+                return;
+              } else {
+                mainPin.style.left = newX + 'px';
+                mainPin.style.top = newY + 'px';
+                updatePinCoordField();
+              }
+            }
           }
-        }
+        });
       };
-
-      document.onmouseup = function (evt) {
-        document.onmousemove = null;
-        document.onmouseup = null;
+      document.addEventListener('mouseup', function (evt) {
+        isDown = false;
+        var removeMove = function () {
+          document.removeEventListener('mousemove', removeMove);
+        };
+        var removeUp = function () {
+          document.removeEventListener('mouseup', removeUp);
+        };
         updatePinCoordField();
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
@@ -182,17 +191,17 @@
             window.getAdverts(load);
           }
         }
-      };
+      });
     });
   });
 
   // достать кликнутые элементы wifi и т.д
   var getActiveFeature = function (inpFeatures) {
-    var inpClick = [];
+    var selected = [];
     for (var i = 0; i < inpFeatures.length; i++) {
-      inpClick.push(inpFeatures[i].value);
+      selected.push(inpFeatures[i].value);
     }
-    return inpClick;
+    return selected;
   };
 
   // получем данные для фильтра тип жилья
