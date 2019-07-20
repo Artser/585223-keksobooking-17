@@ -35,12 +35,16 @@
       var price = form.querySelector('#price');
       if (value === 'bungalo') {
         price.setAttribute('min', 0);
+        price.setAttribute('placeholder', 0);
       } else if (value === 'flat') {
         price.setAttribute('min', 1000);
+        price.setAttribute('placeholder', 1000);
       } else if (value === 'house') {
         price.setAttribute('min', 5000);
+        price.setAttribute('placeholder', 5000);
       } else if (value === 'palace') {
         price.setAttribute('min', 10000);
+        price.setAttribute('placeholder', 10000);
       }
     });
 
@@ -88,6 +92,8 @@
         window.popupClose();
       };
 
+      var cleanButton = document.querySelector('.ad-form__reset');
+      cleanButton.addEventListener('click', closeSuccess);
       var closeClick = function () {
         closeSuccess();
         document.removeEventListener('click', closeClick);

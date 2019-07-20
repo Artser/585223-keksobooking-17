@@ -131,55 +131,46 @@
     mainPin.ondragstart = function () {
       return false;
     };
-    var isDown = false;
+
     mainPin.addEventListener('mousedown', function (e) {
-      isDown = true;
       var downX = e.clientX;
       var downY = e.clientY;
 
       // если dx и dy больше 3 то открываем форму
-      var mouseMove = function () {
-        document.addEventListener('mousemove', function (evt) {
-          if (isDown) {
-            var dx = evt.clientX - downX;
-            var dy = evt.clientY - downY;
-            if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
-              if (!init) {
-                window.showForm();
-                showMap();
-                init = true;
-                window.getAdverts(load);
-              }
-
-              downX = evt.clientX;
-              downY = evt.clientY;
-
-              var newX = parseFloat(mainPin.style.left) + dx;
-              var newY = parseFloat(mainPin.style.top) + dy;
-              if (
-                newY > window.MAP_MAX_HEIGHT ||
-                newY < 130 ||
-                newX > 1140 ||
-                newX < 0
-              ) {
-                return;
-              } else {
-                mainPin.style.left = newX + 'px';
-                mainPin.style.top = newY + 'px';
-                updatePinCoordField();
-              }
-            }
+      var mouseMove = function (evt) {
+        var dx = evt.clientX - downX;
+        var dy = evt.clientY - downY;
+        if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
+          if (!init) {
+            window.showForm();
+            showMap();
+            init = true;
+            window.getAdverts(load);
           }
-        });
+
+          downX = evt.clientX;
+          downY = evt.clientY;
+
+          var newX = parseFloat(mainPin.style.left) + dx;
+          var newY = parseFloat(mainPin.style.top) + dy;
+          if (
+            newY > window.MAP_MAX_HEIGHT ||
+            newY < 130 ||
+            newX > 1140 ||
+            newX < 0
+          ) {
+            return;
+          } else {
+            mainPin.style.left = newX + 'px';
+            mainPin.style.top = newY + 'px';
+            updatePinCoordField();
+          }
+        }
       };
-      document.addEventListener('mouseup', function (evt) {
-        isDown = false;
-        var removeMove = function () {
-          document.removeEventListener('mousemove', removeMove);
-        };
-        var removeUp = function () {
-          document.removeEventListener('mouseup', removeUp);
-        };
+
+      var mouseUp = function (evt) {
+        document.removeEventListener('mousemove', mouseMove);
+        document.removeEventListener('mouseup', mouseUp);
         updatePinCoordField();
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
@@ -191,7 +182,9 @@
             window.getAdverts(load);
           }
         }
-      });
+      };
+      document.addEventListener('mousemove', mouseMove);
+      document.addEventListener('mouseup', mouseUp);
     });
   });
 
