@@ -102,7 +102,7 @@
   };
 
   var drawPins = function (data) {
-    var mapPinsElement = document.querySelector('.map__pins');
+    var pinContainer = document.querySelector('.map__pins');
     var pinsFragment = document.createDocumentFragment();
 
     data.forEach(function (obj) {
@@ -110,12 +110,12 @@
       pinsFragment.appendChild(drawPin(obj, newIndex));
     });
 
-    mapPinsElement.appendChild(pinsFragment);
+    pinContainer.appendChild(pinsFragment);
   };
 
   var mainPin;
   // пишем координаты в поле адресс
-  var updatePinCoordField = function () {
+  window.updatePinCoordField = function () {
     var px =
       parseInt(mainPin.style.left, 10) + Math.floor(window.PIN_WIDTH / 2);
     var py = parseInt(mainPin.style.top, 10) + window.PIN_HEIGHT;
@@ -124,7 +124,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     mainPin = document.querySelector('.map__pin--main');
-
+    window.updatePinCoordField();
     window.disabledForm();
 
     // отключаем Drag браузера по умолчанию
@@ -163,24 +163,20 @@
           } else {
             mainPin.style.left = newX + 'px';
             mainPin.style.top = newY + 'px';
-            updatePinCoordField();
+            window.updatePinCoordField();
           }
         }
       };
 
-      var mouseUp = function (evt) {
+      var mouseUp = function () {
         document.removeEventListener('mousemove', mouseMove);
         document.removeEventListener('mouseup', mouseUp);
-        updatePinCoordField();
-        var dx = evt.clientX - downX;
-        var dy = evt.clientY - downY;
-        if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
-          if (!init) {
-            window.showForm();
-            showMap();
-            init = true;
-            window.getAdverts(load);
-          }
+        window.updatePinCoordField();
+        if (!init) {
+          window.showForm();
+          showMap();
+          init = true;
+          window.getAdverts(load);
         }
       };
       document.addEventListener('mousemove', mouseMove);

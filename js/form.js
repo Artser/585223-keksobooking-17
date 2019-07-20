@@ -70,7 +70,22 @@
         timeIn.value = '14:00';
       }
     });
+    // успешно отправлено - обновляем и стираем
+    var closeSuccess = function () {
+      var cl = document.querySelector('.success');
+      if (cl) {
+        cl.remove();
+      }
+      formSuccess.reset();
+      window.disabledForm();
+      window.removePins();
+      window.movePin();
+      window.popupClose();
+      window.updatePinCoordField();
+    };
 
+    var cleanButton = document.querySelector('.ad-form__reset');
+    cleanButton.addEventListener('click', closeSuccess);
     var formSuccess = document.querySelector('.ad-form');
     var treatSuccessMess = function () {
       var successTemplate = document
@@ -81,19 +96,6 @@
       // добавление элемента
       document.querySelector('main').appendChild(successLog);
 
-      // успешно отправлено - обновляем и стираем
-      var closeSuccess = function () {
-        var cl = document.querySelector('.success');
-        cl.remove();
-        formSuccess.reset();
-        window.disabledForm();
-        window.removePins();
-        window.movePin();
-        window.popupClose();
-      };
-
-      var cleanButton = document.querySelector('.ad-form__reset');
-      cleanButton.addEventListener('click', closeSuccess);
       var closeClick = function () {
         closeSuccess();
         document.removeEventListener('click', closeClick);
@@ -144,11 +146,6 @@
       document.addEventListener('keydown', function (evn) {
         errEsc(evn.keyCode);
       });
-    };
-
-    window.clearPage = function () {
-      formSuccess.reset();
-      window.disabledForm();
     };
 
     // валидация комнат гостей

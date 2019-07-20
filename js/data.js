@@ -94,7 +94,12 @@
       target = target.parentNode;
     }
   });
-
+  window.popupClose = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+  };
   // ЗАПОЛНЯЕМ модальное окно информацией
   var createModal = function (newObj) {
     var template = document.querySelector('#card').content;
@@ -130,10 +135,10 @@
       ' , выезд до ' +
       value.offer.checkout;
 
-    var mainFeatures = cardClone.querySelector('.popup__features');
-    var newFeatures = cardClone.querySelectorAll('.popup__feature');
+    var featureContainer = cardClone.querySelector('.popup__features');
+    var features = cardClone.querySelectorAll('.popup__feature');
 
-    newFeatures.forEach(function (valueFeature) {
+    features.forEach(function (valueFeature) {
       valueFeature.parentNode.removeChild(valueFeature);
     });
 
@@ -142,7 +147,7 @@
       newFeature.classList.add('popup__feature'); // добавляет класс
       newFeature.classList.add('popup__feature--' + valueIcon);
 
-      mainFeatures.appendChild(newFeature); // добавлем элемент иконку с удобствами
+      featureContainer.appendChild(newFeature); // добавлем элемент иконку с удобствами
     });
 
     var textDescription = cardClone.querySelector('.popup__description');
@@ -158,11 +163,6 @@
     photo.remove();
 
     // закрываем окно с информацией при клике
-
-    window.popupClose = function (evt) {
-      document.querySelector('.map__card').remove();
-      evt.target.removeEventListener('click', window.popupClose);
-    };
 
     cardClone
       .querySelector('.popup__close')
