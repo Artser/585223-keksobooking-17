@@ -132,9 +132,9 @@
       return false;
     };
 
-    mainPin.addEventListener('mousedown', function (e) {
-      var downX = e.clientX;
-      var downY = e.clientY;
+    mainPin.addEventListener('mousedown', function (evtDown) {
+      var downX = evtDown.clientX;
+      var downY = evtDown.clientY;
 
       // если dx и dy больше 3 то открываем форму
       var mouseMove = function (evt) {
@@ -206,10 +206,10 @@
     var rooms = filterRooms.value;
     var guests = filterGuests.value;
 
-    var filterInputsArr1 = document.querySelectorAll(
+    var filterInputsArray = document.querySelectorAll(
         '#housing-features input:checked'
     );
-    var features = getActiveFeature(filterInputsArr1);
+    var features = getActiveFeature(filterInputsArray);
 
     // для фильтра
     var value = {

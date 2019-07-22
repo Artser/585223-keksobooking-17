@@ -72,9 +72,9 @@
     });
     // успешно отправлено - обновляем и стираем
     var closeSuccess = function () {
-      var cl = document.querySelector('.success');
-      if (cl) {
-        cl.remove();
+      var success = document.querySelector('.success');
+      if (success) {
+        success.remove();
       }
       formSuccess.reset();
       window.disabledForm();
