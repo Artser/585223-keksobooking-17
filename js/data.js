@@ -94,12 +94,22 @@
       target = target.parentNode;
     }
   });
+
+  var popupCloseEsc = function (evt) {
+    if (evt.keyCode === 27 || evt.keyCode === 13) {
+      document.querySelector('.map__card').remove();
+      document.removeEventListener('keydown', popupCloseEsc);
+    }
+  };
+
   window.popupClose = function () {
     var card = document.querySelector('.map__card');
     if (card) {
       card.remove();
+      document.removeEventListener('keydown', popupCloseEsc);
     }
   };
+
   // ЗАПОЛНЯЕМ модальное окно информацией
   var createModal = function (newObj) {
     var template = document.querySelector('#card').content;
@@ -170,12 +180,6 @@
 
     // закрывает окно по нажатию esc
 
-    var popupCloseEsc = function (evt) {
-      if (evt.keyCode === 27 || evt.keyCode === 13) {
-        document.querySelector('.map__card').remove();
-        document.removeEventListener('keydown', popupCloseEsc);
-      }
-    };
     document.addEventListener('keydown', popupCloseEsc);
 
     cardClone.querySelector('article').setAttribute('data', newData);
