@@ -113,7 +113,7 @@
       document.addEventListener('keydown', closeEsc);
     };
 
-    var treatErrorMess = function (textM) {
+    var treatErrorMess = function (textError) {
       var errorTemplate = document
         .querySelector('#error')
         .content.querySelector('.error'); // ищем тег template и берем всего содержимое
@@ -121,7 +121,7 @@
       var errorLog = errorTemplate.cloneNode(true);
       // добавление элемента
       document.querySelector('main').appendChild(errorLog);
-      errorLog.querySelector('.error__message').textContent = textM;
+      errorLog.querySelector('.error__message').textContent = textError;
 
       var errEsc = function (keyCode) {
         if (keyCode === 27) {

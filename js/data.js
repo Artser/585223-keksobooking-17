@@ -3,7 +3,7 @@
   window.PIN_WIDTH = 62;
   window.PIN_HEIGHT = 84;
   window.MAP_MAX_HEIGHT = 630;
-  var errMess = function (textErr) {
+  var treatError = function (textErr) {
     var errorTemplate = document
       .querySelector('#error')
       .content.querySelector('.error'); // ищем тег template и берем всего содержимое
@@ -28,10 +28,10 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('error', function () {
-      errMess('Что-то пошло не так! Произошла ошибка соединения');
+      treatError('Что-то пошло не так! Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
-      errMess('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      treatError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
     xhr.timeout = 10000;
 
@@ -69,13 +69,13 @@
           load(xhr.response, value);
           return;
         case 400:
-          errMess('Неверный запрос');
+          treatError('Неверный запрос');
           return;
         case 404:
-          errMess('Что-то пошло не так! Произошла ошибка соединения');
+          treatError('Что-то пошло не так! Произошла ошибка соединения');
           return;
         default:
-          errMess('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
+          treatError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
           return;
       }
     });
