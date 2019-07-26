@@ -95,18 +95,18 @@
     }
   });
 
-  var popupCloseEsc = function (evt) {
+  var onPopupCloseEscKeydown = function (evt) {
     if (evt.keyCode === 27 || evt.keyCode === 13) {
       document.querySelector('.map__card').remove();
-      document.removeEventListener('keydown', popupCloseEsc);
+      document.removeEventListener('keydown', onPopupCloseEscKeydown);
     }
   };
 
-  window.popupClose = function () {
+  window.onPopupCloseClick = function () {
     var card = document.querySelector('.map__card');
     if (card) {
       card.remove();
-      document.removeEventListener('keydown', popupCloseEsc);
+      document.removeEventListener('keydown', onPopupCloseEscKeydown);
     }
   };
 
@@ -176,11 +176,11 @@
 
     cardClone
       .querySelector('.popup__close')
-      .addEventListener('click', window.popupClose);
+      .addEventListener('click', window.onPopupCloseClick);
 
     // закрывает окно по нажатию esc
 
-    document.addEventListener('keydown', popupCloseEsc);
+    document.addEventListener('keydown', onPopupCloseEscKeydown);
 
     cardClone.querySelector('article').setAttribute('data', newData);
 

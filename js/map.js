@@ -25,6 +25,7 @@
         window.Labels.push(data[item]);
       }
     }
+    window.removePins(); // удаляем все метки, чтобы загрузить нужные
     // отбираем значения по типу жилья
     window.Labels = window.Labels.filter(function (currentValue) {
       window.removeAllCards();
@@ -137,7 +138,7 @@
       var downY = evtDown.clientY;
 
       // если dx и dy больше 3 то открываем форму
-      var mouseMove = function (evt) {
+      var onMouseMove = function (evt) {
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
         if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
@@ -168,9 +169,9 @@
         }
       };
 
-      var mouseUp = function () {
-        document.removeEventListener('mousemove', mouseMove);
-        document.removeEventListener('mouseup', mouseUp);
+      var onMouseUp = function () {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
         window.updatePinCoordField();
         if (!init) {
           window.showForm();
@@ -179,8 +180,8 @@
           window.getAdverts(load);
         }
       };
-      document.addEventListener('mousemove', mouseMove);
-      document.addEventListener('mouseup', mouseUp);
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
     });
   });
 
@@ -219,8 +220,6 @@
       guests: guests,
       features: features
     };
-
-    window.removePins(); // удаляем все метки, чтобы загрузить нужные
 
     var debounceLoad = debounce(load);
     debounceLoad(window.Lab, value);

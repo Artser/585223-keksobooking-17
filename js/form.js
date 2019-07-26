@@ -71,7 +71,7 @@
       }
     });
     // успешно отправлено - обновляем и стираем
-    var closeSuccess = function () {
+    var onCloseSuccessClick = function () {
       var success = document.querySelector('.success');
       if (success) {
         success.remove();
@@ -80,12 +80,12 @@
       window.disabledForm();
       window.removePins();
       window.movePin();
-      window.popupClose();
+      window.onPopupCloseClick();
       window.updatePinCoordField();
     };
 
     var cleanButton = document.querySelector('.ad-form__reset');
-    cleanButton.addEventListener('click', closeSuccess);
+    cleanButton.addEventListener('click', onCloseSuccessClick);
     var formSuccess = document.querySelector('.ad-form');
     var treatSuccessMess = function () {
       var successTemplate = document
@@ -96,21 +96,21 @@
       // добавление элемента
       document.querySelector('main').appendChild(successLog);
 
-      var closeClick = function () {
-        closeSuccess();
-        document.removeEventListener('click', closeClick);
+      var onCloseClick = function () {
+        onCloseSuccessClick();
+        document.removeEventListener('click', onCloseClick);
       };
 
-      var closeEsc = function (evt) {
+      var onCloseEscKeydown = function (evt) {
         if (evt.keyCode === 27 || evt.keyCode === 13) {
-          closeSuccess();
-          document.removeEventListener('keydown', closeEsc);
+          onCloseSuccessClick();
+          document.removeEventListener('keydown', onCloseEscKeydown);
         }
       };
 
-      successLog.addEventListener('click', closeClick);
+      successLog.addEventListener('click', onCloseClick);
 
-      document.addEventListener('keydown', closeEsc);
+      document.addEventListener('keydown', onCloseEscKeydown);
     };
 
     var treatErrorMess = function (textError) {
