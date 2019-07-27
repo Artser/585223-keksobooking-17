@@ -77,6 +77,9 @@
         success.remove();
       }
       formSuccess.reset();
+      var price = form.querySelector('#price');
+      price.setAttribute('min', 1000);
+      price.setAttribute('placeholder', 1000);
       window.disabledForm();
       window.removePins();
       window.movePin();
@@ -195,5 +198,42 @@
         treatErrorMess('Ошибка ' + this.status);
       };
     });
+    var onAvatarChange = function (evt) {
+      var input = evt.target;
+
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        var dataURL = reader.result;
+        var output = document.querySelector('.ad-form-header__preview img');
+        output.src = dataURL;
+      });
+      reader.readAsDataURL(input.files[0]);
+    };
+    var avatar = document.querySelector('#avatar');
+    avatar.addEventListener('change', onAvatarChange);
+
+    var onPictureChange = function (event) {
+      var input = event.target;
+
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        var dataURL = reader.result;
+        var adPhoto = document.querySelector('.ad-form__photo');
+        var output = adPhoto.cloneNode(true);
+        adPhoto.setAttribute('hidden', 'hidden');
+        var img = document.createElement('img');
+        img.src = dataURL;
+        img.style = 'width: 100%; object-fit: contain; height: 100%';
+        output.appendChild(img);
+        output.removeAttribute('hidden');
+        var photoContainer = document.querySelector(
+            '.ad-form__photo-container'
+        );
+        photoContainer.appendChild(output);
+      });
+      reader.readAsDataURL(input.files[0]);
+    };
+    var photo = document.querySelector('#images');
+    photo.addEventListener('change', onPictureChange);
   });
 })();
