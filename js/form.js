@@ -78,8 +78,8 @@
       }
       formSuccess.reset();
       var price = form.querySelector('#price');
-      price.setAttribute('min', 1000);
-      price.setAttribute('placeholder', 1000);
+      price.setAttribute('min', window.PRICE);
+      price.setAttribute('placeholder', window.PRICE);
       window.disabledForm();
       window.removePins();
       window.movePin();
@@ -105,7 +105,7 @@
       };
 
       var onCloseEscKeydown = function (evt) {
-        if (evt.keyCode === 27 || evt.keyCode === 13) {
+        if (evt.keyCode === window.ESCAPE || evt.keyCode === window.ENTER) {
           onCloseSuccessClick();
           document.removeEventListener('keydown', onCloseEscKeydown);
         }
@@ -127,7 +127,7 @@
       errorLog.querySelector('.error__message').textContent = textError;
 
       var errEsc = function (keyCode) {
-        if (keyCode === 27) {
+        if (keyCode === window.ESCAPE) {
           errorLog.remove();
         }
       };
@@ -177,7 +177,6 @@
       var xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://js.dump.academy/keksobooking/');
       xhr.send(formData);
-
       xhr.addEventListener('load', function () {
         switch (xhr.status) {
           case 200:
@@ -198,9 +197,9 @@
         treatErrorMess('Ошибка ' + this.status);
       };
     });
+
     var onAvatarChange = function (evt) {
       var input = evt.target;
-
       var reader = new FileReader();
       reader.addEventListener('load', function () {
         var dataURL = reader.result;
@@ -212,9 +211,8 @@
     var avatar = document.querySelector('#avatar');
     avatar.addEventListener('change', onAvatarChange);
 
-    var onPictureChange = function (event) {
-      var input = event.target;
-
+    var onPictureChange = function (evt) {
+      var input = evt.target;
       var reader = new FileReader();
       reader.addEventListener('load', function () {
         var dataURL = reader.result;

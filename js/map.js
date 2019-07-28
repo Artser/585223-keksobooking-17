@@ -141,7 +141,7 @@
       var onMouseMove = function (evt) {
         var dx = evt.clientX - downX;
         var dy = evt.clientY - downY;
-        if (Math.abs(dx) > 3 && Math.abs(dy) > 3) {
+        if (Math.abs(dx) > window.PIXEL && Math.abs(dy) > window.PIXEL) {
           if (!init) {
             window.showForm();
             showMap();
@@ -156,9 +156,9 @@
           var newY = parseFloat(mainPin.style.top) + dy;
           if (
             newY > window.MAP_MAX_HEIGHT ||
-            newY < 130 ||
-            newX > 1140 ||
-            newX < 0
+            newY < window.MAP_MIN_HEIGHT ||
+            newX > window.MAP_MAX_WIDTH ||
+            newX < window.MAP_MIN_WIDTH
           ) {
             return;
           } else {

@@ -3,6 +3,13 @@
   window.PIN_WIDTH = 62;
   window.PIN_HEIGHT = 84;
   window.MAP_MAX_HEIGHT = 630;
+  window.MAP_MIN_HEIGHT = 130;
+  window.MAP_MAX_WIDTH = 1140;
+  window.MAP_MIN_WIDTH = 0;
+  window.ESCAPE = 27;
+  window.ENTER = 13;
+  window.PRICE = 1000;
+  window.PIXEL = 3;
   var treatError = function (textErr) {
     var errorTemplate = document
       .querySelector('#error')
@@ -96,7 +103,7 @@
   });
 
   var onPopupCloseEscKeydown = function (evt) {
-    if (evt.keyCode === 27 || evt.keyCode === 13) {
+    if (evt.keyCode === window.ESCAPE || evt.keyCode === window.ENTER) {
       document.querySelector('.map__card').remove();
       document.removeEventListener('keydown', onPopupCloseEscKeydown);
     }
